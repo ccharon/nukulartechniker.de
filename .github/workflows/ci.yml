@@ -21,7 +21,7 @@ jobs:
           password: ${{ secrets.SFTP_PASSWORD }}
           server: ${{ secrets.SFTP_SERVER }}
           local_path: './html/*'
-          remote_path: '/'
+          remote_path: '.'
           sftpArgs: '-o ConnectTimeout=5'
           sftp_only: true
           delete_remote_files: true
