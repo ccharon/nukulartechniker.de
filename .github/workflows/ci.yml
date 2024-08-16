@@ -21,3 +21,5 @@ jobs:
           remoteDir: '.'
           localDir: './html'
           options: 'delete'
+          onlyNewer: false
+          parallel: 1
