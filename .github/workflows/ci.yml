@@ -1,0 +1,29 @@
+name: ci
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+    
+env:
+  DOCKER_IMAGE: ccharon/echoip
+  
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: SFTP Deploy
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          # username
+          username: ${{ secrets.SFTP_USERNAME }}
+          password: ${{ secrets.SFTP_PASSWORD }}
+          server: ${{ secrets.SFTP_SERVER }}
+          local_path: './html/*'
+          remote_path: '/'
+          sftpArgs: '-o ConnectTimeout=5'
+          sftp_only: true
+          delete_remote_files: true
+
+      
