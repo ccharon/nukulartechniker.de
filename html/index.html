@@ -1,65 +1,36 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-    <title>nukulartechniker.de</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Nukulartechniker Zitat">
-    <link rel="stylesheet" href="styles.css"> <!-- Link to the external CSS file -->
+    <head>
+        <title>nukulartechniker.de</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Nukulartechniker Zitat">
+        <link rel="stylesheet" href="styles.css">
+    </head>
 
-    <script>
-        async function showArticle(articleFile) {
-            try {
-                const response = await fetch(`articles/${articleFile}`);
+    <body>
+        <header>
+            <h1>Nukulartechniker</h1>
+        </header>
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+        <div class="content">
+            <aside>
+                <ul>
+                    <li><a href="#" onclick="showArticle('article1.html')">Article 1</a></li>
+                    <li><a href="#" onclick="showArticle('article2.html')">Article 2</a></li>
+                    <li><a href="#" onclick="showArticle('article3.html')">Article 3</a></li>
+                </ul>
+            </aside>
 
-                const text = await response.text();
+            <section id="main">
+                <h1>Nukular, das heisst nukular.<br>H.J. Simpson, Nukulartechniker</h1>
+            </section>
+        </div>
 
-                // Log the fetched content to ensure it is loading correctly
-                console.log('Fetched content:', text);
+        <footer>
+            <p>&copy; 2024, Christian Charon</p>
+        </footer>
 
-                // Parse the fetched HTML content
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(text, 'text/html');
-
-                // Extract the body content
-                const articleContent = doc.body.innerHTML;
-
-                // Inject the article content into the main section
-                document.querySelector("#main").innerHTML = articleContent;
-
-            } catch (error) {
-                console.error('Failed to load article:', error);
-                document.querySelector("#main").innerHTML = "<h1>Error</h1><p>Failed to load the article.</p>";
-            }
-        }
-
-    </script>
-</head>
-<body>
-<header>
-    <h1>Nukulartechniker</h1>
-</header>
-
-<div class="content">
-    <aside>
-        <ul>
-            <li><a href="#" onclick="showArticle('article1.html')">Article 1</a></li>
-            <li><a href="#" onclick="showArticle('article2.html')">Article 2</a></li>
-            <li><a href="#" onclick="showArticle('article3.html')">Article 3</a></li>
-        </ul>
-    </aside>
-
-    <section id="main">
-        <h1>Nukular, das heisst nukular.<br>H.J. Simpson, Nukulartechniker</h1>
-    </section>
-</div>
-
-<footer>
-    <p>&copy; 2024, Christian Charon</p>
-</footer>
-</body>
+        <script src="main.js"></script>
+    </body>
 </html>
