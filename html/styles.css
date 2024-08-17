@@ -1,0 +1,99 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Make body take up full height */
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Arial', sans-serif;
+    background-color: #1f1f1f; /* Dark background */
+    color: #e0e0e0; /* Light text for contrast */
+    margin: 0;
+}
+
+/* Header */
+header {
+    background-color: #2c3e50; /* Darker blue-gray */
+    padding: 20px;
+    color: #ecf0f1; /* Light text color */
+    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); /* Soft shadow for depth */
+}
+
+header h1 {
+    font-size: 1.8rem; /* Increased font size */
+    color: #e67e22; /* Vibrant orange accent */
+}
+
+/* Main content container */
+.content {
+    display: flex;
+    flex: 1;
+    padding: 20px;
+    gap: 20px;
+}
+
+section#main,
+aside {
+    background: #34495e; /* Dark blue-gray for content sections */
+    padding: 20px;
+    border-radius: 10px; /* More pronounced rounded corners */
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow */
+}
+
+section#main {
+    flex: 1;
+}
+
+aside {
+    width: 250px;
+}
+
+aside ul {
+    list-style: none;
+    padding: 0;
+}
+
+aside li {
+    margin-bottom: 15px; /* Increased space between items */
+}
+
+aside a {
+    display: block;
+    padding: 15px; /* Larger padding for a more button-like appearance */
+    background-color: #e67e22; /* Vibrant orange */
+    color: #ecf0f1;
+    border-radius: 8px;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Added transition for hover effects */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15); /* Light shadow for button */
+}
+
+aside a:hover {
+    background-color: #d35400; /* Darker orange on hover */
+    color: #ffffff;
+    transform: scale(1.05); /* Slight scale effect on hover */
+}
+
+aside a:active {
+    transform: scale(0.95); /* Slight shrink on click */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); /* Reduce shadow when clicked */
+}
+
+/* Footer */
+footer {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    text-align: center;
+    padding: 20px;
+    font-size: 90%;
+    box-shadow: 0px -4px 8px rgba(0, 0, 0, 0.3); /* Shadow at the top of the footer */
+}
