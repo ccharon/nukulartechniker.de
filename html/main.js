@@ -34,5 +34,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const articleNumber = urlParams.get('article');
 
-    showArticle(articleNumber);
+    if (articleNumber) {
+        showArticle(articleFile);
+    }
 });
