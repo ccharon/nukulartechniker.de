@@ -101,7 +101,15 @@
         async function showArticle(articleFile) {
             try {
                 const response = await fetch(`articles/${articleFile}`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
                 const text = await response.text();
+
+                // Log the fetched content to ensure it is loading correctly
+                console.log('Fetched content:', text);
 
                 // Parse the fetched HTML content
                 const parser = new DOMParser();
@@ -112,10 +120,13 @@
 
                 // Inject the article content into the main section
                 document.querySelector("#main").innerHTML = articleContent;
+
             } catch (error) {
+                console.error('Failed to load article:', error);
                 document.querySelector("#main").innerHTML = "<h1>Error</h1><p>Failed to load the article.</p>";
             }
         }
+
     </script>
 </head>
 <body>
@@ -126,9 +137,9 @@
 <div class="content">
     <aside>
         <ul>
-            <li><a href="#" onclick="showArticle('article1')">Article 1</a></li>
-            <li><a href="#" onclick="showArticle('article2')">Article 2</a></li>
-            <li><a href="#" onclick="showArticle('article3')">Article 3</a></li>
+            <li><a href="#" onclick="showArticle('article1.html')">Article 1</a></li>
+            <li><a href="#" onclick="showArticle('article2.html')">Article 2</a></li>
+            <li><a href="#" onclick="showArticle('article3.html')">Article 3</a></li>
         </ul>
     </aside>
 
