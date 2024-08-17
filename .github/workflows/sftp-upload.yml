@@ -1,4 +1,4 @@
-name: ci
+name: SFTP Upload
 
 on:
   push:
