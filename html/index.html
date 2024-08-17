@@ -21,39 +21,39 @@
         body {
             display: flex;
             flex-direction: column;
-            font-family: 'Arial', sans-serif; /* Updated font to a more modern sans-serif */
-            background-color: #f4f4f9; /* Soft off-white background */
-            color: #333; /* Dark gray for better readability */
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
             margin: 0;
         }
 
         /* Header */
         header {
-            background-color: #556080; /* Soft dark blue */
-            padding: 20px; /* Added padding for more breathing space */
-            color: #f4f4f9; /* Match background color to keep text legible */
-            text-align: center; /* Centered header content */
+            background-color: #556080;
+            padding: 20px;
+            color: #f4f4f9;
+            text-align: center;
         }
 
         header h1 {
             font-size: 150%;
-            color: #f1d302; /* A vibrant accent yellow */
+            color: #f1d302;
         }
 
         /* Main content container */
         .content {
             display: flex;
             flex: 1;
-            padding: 20px; /* Increased padding for better spacing */
-            gap: 20px; /* Gap between main content and sidebar */
+            padding: 20px;
+            gap: 20px;
         }
 
         section#main,
         aside {
-            background: #fff; /* Pure white for contrast against the background */
-            padding: 20px; /* Consistent padding inside the boxes */
-            border-radius: 8px; /* Rounded edges */
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Softer drop shadow */
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         section#main {
@@ -61,54 +61,89 @@
         }
 
         aside {
-            width: 250px; /* Slightly wider sidebar */
+            width: 250px;
+        }
+
+        aside ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        aside li {
+            margin-bottom: 10px;
+        }
+
+        aside a {
+            display: block;
+            padding: 10px;
+            background-color: #556080;
+            color: #f4f4f9;
+            border-radius: 5px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        aside a:hover {
+            background-color: #f1d302;
+            color: #333;
         }
 
         /* Footer */
         footer {
-            background-color: #556080; /* Same as header for consistency */
-            color: #f4f4f9; /* Same text color as header */
+            background-color: #556080;
+            color: #f4f4f9;
             text-align: center;
             padding: 20px;
             font-size: 90%;
         }
-
-        /* Link Styles */
-        a {
-            color: #556080; /* Dark blue for links */
-            text-decoration: none; /* No underline for a clean look */
-        }
-
-        a:hover {
-            color: #f1d302; /* Accent yellow on hover */
-        }
-
-        a:visited {
-            color: #7b8ba2; /* Soft gray-blue for visited links */
-        }
     </style>
+    <script>
+        async function showArticle(articleFile) {
+            try {
+                const response = await fetch(`articles/${articleFile}`);
+                const text = await response.text();
+
+                // Parse the fetched HTML content
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(text, 'text/html');
+
+                // Extract the body content
+                const articleContent = doc.body.innerHTML;
+
+                // Inject the article content into the main section
+                document.querySelector("#main").innerHTML = articleContent;
+            } catch (error) {
+                document.querySelector("#main").innerHTML = "<h1>Error</h1><p>Failed to load the article.</p>";
+            }
+        }
+    </script>
 </head>
 <body>
-    <header>
-        <h1>Nukular, das heisst nukular.<br>H.J. Simpson, Nukulartechniker</h1>
-    </header>
+<header>
+    <h1>Nukular, das heisst nukular.<br>H.J. Simpson, Nukulartechniker</h1>
+</header>
 
-    <div class="content">
-        <section id="main">
-            <h1>HTML5 Test ... mal schauen</h1>
-            <p>
-                hier gibt es einfach eine Menge Text die so vor sich hin geschrieben wurde. Das Ganze steckt in Paragraph Tags ... was passiert denn wenn ich hier immer weiter schreibe? gibt es irgwendwann einen Zeilenumbruch oder wird es auch auf der Webseite einfach ganz lang und voll doof weil es das Layout kaputt macht
-            </p>
-        </section>
-        <aside>
-            <p>SIDEBAR</p>
-        </aside>
-    </div>
+<div class="content">
+    <aside>
+        <ul>
+            <li><a href="#" onclick="showArticle('article1')">Article 1</a></li>
+            <li><a href="#" onclick="showArticle('article2')">Article 2</a></li>
+            <li><a href="#" onclick="showArticle('article3')">Article 3</a></li>
+        </ul>
+    </aside>
 
-    <footer>
-        &copy; 2024, Christian Charon
-        <br>
-        Sogar mit 2. Zeile
-    </footer>
+    <section id="main">
+        <h1>HTML5 Test ... mal schauen</h1>
+        <p>
+            hier gibt es einfach eine Menge Text die so vor sich hin geschrieben wurde. Das Ganze steckt in Paragraph Tags ... was passiert denn wenn ich hier immer weiter schreibe? gibt es irgwendwann einen Zeilenumbruch oder wird es auch auf der Webseite einfach ganz lang und voll doof weil es das Layout kaputt macht
+        </p>
+    </section>
+</div>
+
+<footer>
+    &copy; 2024, Christian Charon
+    <br>
+    Sogar mit 2. Zeile
+</footer>
 </body>
 </html>
