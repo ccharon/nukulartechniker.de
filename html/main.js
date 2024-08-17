@@ -35,6 +35,6 @@ window.addEventListener('DOMContentLoaded', () => {
     const articleNumber = urlParams.get('article');
 
     if (articleNumber) {
-        showArticle(articleFile);
+        showArticle(articleNumber);
     }
 });
