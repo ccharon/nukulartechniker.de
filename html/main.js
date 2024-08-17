@@ -1,10 +1,12 @@
-async function showArticle(articleFile) {
+async function showArticle(articleNumber) {
     // Basic validation to ensure it's a safe filename
-    if (!/^[a-zA-Z0-9_-]+\.html$/.test(articleFile)) {
-        console.error('Invalid article requested:', articleFile);
+    if (!(articleNumber && Number.isInteger(Number(articleNumber)))) {
+        console.error('Invalid article requested');
         document.querySelector("#main").innerHTML = "<h1>Error</h1><p>Invalid article requested.</p>";
         return;
     }
+
+    const articleFile = `article${articleNumber}.html`;
 
     try {
         const response = await fetch(`articles/${articleFile}`);
@@ -20,7 +22,7 @@ async function showArticle(articleFile) {
         document.querySelector("#main").innerHTML = doc.body.innerHTML;
 
         // Update the URL to reflect the loaded article
-        history.pushState(null, '', `?article=${articleFile}`);
+        history.pushState(null, '', `?article=${articleNumber}`);
 
     } catch (error) {
         console.error('Failed to load article:', error);
@@ -30,9 +32,7 @@ async function showArticle(articleFile) {
 
 window.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const articleFile = urlParams.get('article');
+    const articleNumber = urlParams.get('article');
 
-    if (articleFile) {
-        showArticle(articleFile);
-    }
+    showArticle(articleNumber);
 });
