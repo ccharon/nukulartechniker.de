@@ -1,89 +1,114 @@
 <!DOCTYPE html>
 <html lang="de">
-    <head>
-        <title>nukulartechniker.de</title>
-        
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="Nukulartechniker Zitat">
-        
-        <style>
-            body {
-                background-color: #b5a789;
-                font-family: Georgia, "Times New Roman", Times, serif;
-                font-size: small;
-                margin: 0px;
-            }
-            header {
-              background-color: #675c47;
-              margin: 10px 10px 0px 10px;
-              height:           108px;
-            }
+<head>
+    <title>nukulartechniker.de</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Nukulartechniker Zitat">
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-            div#tableContainer {
-            	display: table;
-            	border-spacing: 10px;
-            }
-            
-            div#tableRow {
-            	display: table-row;
-            }
-            
-            section#main {
-              display: table-cell;
-              background:       #efe5d0;
-              font-size:        105%;
-              padding:          15px;
-              vertical-align: top;
-            }
-            
-            aside {
-              display: table-cell;
-              background:       #efe5d0;
-              font-size:        105%;
-              padding:          15px;
-              vertical-align: top;
-            }
-            
-            footer {
-              background-color: #675c47;
-              color:            #efe5d0;
-              text-align:       center;
-              padding:          15px;
-              margin: 0px 10px 10px 10px;
-              font-size:        90%;
-            }
-            
-            h1 {
-                font-size: 120%;
-                color: #954b4b;
-            }
-        </style>
-    </head>
-    <body>
-        <header>
-           <h1>Nukular, das heisst nukular.<br>H.J. Simpson, Nukulartechniker</h1>
-        </header>
+        /* Make body take up full height */
+        html, body {
+            height: 100%;
+        }
 
-        <div id="tableContainer">
-    	    <div id="tableRow">
-                <section id="main">
-                    <h1>HTML5 Test ... mal schauen</h1>
-                    <p>
-                        hier gibt es einfach eine Menge Text die so vor sich hin geschrieben wurde. Das Ganze steckt in Paragraph Tags ... was passiert denn wenn ich hier immer weiter schreibe? gibt es irgwendwann einen Zeilenumbruch oder wird es auch auf der Webseite einfach ganz lang und voll doof weil es das Layout kaputt macht
-                    </p>
-                </section>   
-        
-                <aside>        
-                <p>SIDEBAR</p>
-                </aside>
-            </div>   
-        </div>   
+        body {
+            display: flex;
+            flex-direction: column;
+            font-family: 'Arial', sans-serif; /* Updated font to a more modern sans-serif */
+            background-color: #f4f4f9; /* Soft off-white background */
+            color: #333; /* Dark gray for better readability */
+            margin: 0;
+        }
 
-        <footer>
-            &copy; 2024, Christian Charon
-            <br>
-            Sogar mit 2. Zeile
-        </footer>
-    </body>
+        /* Header */
+        header {
+            background-color: #556080; /* Soft dark blue */
+            padding: 20px; /* Added padding for more breathing space */
+            color: #f4f4f9; /* Match background color to keep text legible */
+            text-align: center; /* Centered header content */
+        }
+
+        header h1 {
+            font-size: 150%;
+            color: #f1d302; /* A vibrant accent yellow */
+        }
+
+        /* Main content container */
+        .content {
+            display: flex;
+            flex: 1;
+            padding: 20px; /* Increased padding for better spacing */
+            gap: 20px; /* Gap between main content and sidebar */
+        }
+
+        section#main,
+        aside {
+            background: #fff; /* Pure white for contrast against the background */
+            padding: 20px; /* Consistent padding inside the boxes */
+            border-radius: 8px; /* Rounded edges */
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Softer drop shadow */
+        }
+
+        section#main {
+            flex: 1;
+        }
+
+        aside {
+            width: 250px; /* Slightly wider sidebar */
+        }
+
+        /* Footer */
+        footer {
+            background-color: #556080; /* Same as header for consistency */
+            color: #f4f4f9; /* Same text color as header */
+            text-align: center;
+            padding: 20px;
+            font-size: 90%;
+        }
+
+        /* Link Styles */
+        a {
+            color: #556080; /* Dark blue for links */
+            text-decoration: none; /* No underline for a clean look */
+        }
+
+        a:hover {
+            color: #f1d302; /* Accent yellow on hover */
+        }
+
+        a:visited {
+            color: #7b8ba2; /* Soft gray-blue for visited links */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Nukular, das heisst nukular.<br>H.J. Simpson, Nukulartechniker</h1>
+    </header>
+
+    <div class="content">
+        <section id="main">
+            <h1>HTML5 Test ... mal schauen</h1>
+            <p>
+                hier gibt es einfach eine Menge Text die so vor sich hin geschrieben wurde. Das Ganze steckt in Paragraph Tags ... was passiert denn wenn ich hier immer weiter schreibe? gibt es irgwendwann einen Zeilenumbruch oder wird es auch auf der Webseite einfach ganz lang und voll doof weil es das Layout kaputt macht
+            </p>
+        </section>
+        <aside>
+            <p>SIDEBAR</p>
+        </aside>
+    </div>
+
+    <footer>
+        &copy; 2024, Christian Charon
+        <br>
+        Sogar mit 2. Zeile
+    </footer>
+</body>
 </html>
