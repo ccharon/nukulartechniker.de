@@ -22,9 +22,5 @@ jobs:
           SFTP_SERVER: ${{ secrets.SFTP_SERVER }}
           SFTP_USERNAME: ${{ secrets.SFTP_USERNAME }}
           SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
-        run: |
-          lftp -u "$SFTP_USERNAME,$SFTP_PASSWORD" sftp://$SFTP_SERVER <<EOF
-          set sftp:auto-confirm yes  # Automatically confirm any SSH host key prompts
-          mirror -R --delete ./html .  # Upload and delete remote files not present locally
-          bye  # Exit lftp
-          EOF
+        run: lftp -u "$SFTP_USERNAME,$SFTP_PASSWORD" -p 22 sftp://$SFTP_SERVER -e 'set sftp:auto-confirm yes; set ftp:ssl-force yes; set ssl:verify-certificate yes; mirror --delete --reverse ./html . ; bye'
+        
