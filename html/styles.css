@@ -39,14 +39,15 @@ header h1 {
     flex: 1;
     padding: 20px;
     gap: 20px;
+    flex-direction: row; /* Default direction for larger screens */
 }
 
 section#main,
 aside {
     background: #34495e; /* Dark blue-gray for content sections */
     padding: 20px;
-    border-radius: 10px; /* More pronounced rounded corners */
-    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow */
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 section#main {
@@ -86,6 +87,21 @@ aside a:hover {
 aside a:active {
     transform: scale(0.95); /* Slight shrink on click */
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); /* Reduce shadow when clicked */
+}
+
+/* Responsive Styles */
+@media (max-width: 400px) {
+    .content {
+        flex-direction: column; /* Stack aside above main content */
+    }
+
+    aside {
+        width: 100%; /* Make aside full width */
+    }
+
+    section#main {
+        width: 100%; /* Ensure main content is full width */
+    }
 }
 
 /* Footer */
