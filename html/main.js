@@ -59,3 +59,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('a[data-article-id]').forEach(function(link) {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            showArticle(this.getAttribute('data-article-id'));
+        });
+    });
+});
