@@ -234,3 +234,20 @@ footer a:visited {
         width: 100%;
     }
 }
+
+pre {
+    background-color: #2d2d2d;
+    color: #f8f8f2;
+    padding: 10px;
+    border-radius: 5px;
+    overflow-x: auto;
+    max-width: 100%; /* Set a maximum width */
+    word-wrap: break-word; /* Ensure text wraps within the block */
+    white-space: pre-wrap; /* Wrap text within the block */
+}
+
+code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1rem;
+    display: block; /* Ensure the code block takes up the full width */
+}

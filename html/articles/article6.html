@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greaseweazle</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<h1>Software installation and usage examples of a greaseweazle</h1>
+<p>device for accessing a floppy drive at the raw flux level</p>
+
+<h2>Installation under Linux (Gentoo) in a separate python venv</h2>
+<pre><code>
+python -m venv $HOME/greaseweazle/venv
+. $HOME/greaseweazle/venv/bin/activate
+pip install git+https://github.com/keirf/greaseweazle@latest
+</code></pre>
+<p>To use the now installed <code>gw</code> the venv has to be active. To activate it use:</p>
+<pre><code>
+. $HOME/greaseweazle/bin/activate
+</code></pre>
+<p>Or use a little script, maybe <code>$HOME/bin/weazle.sh</code>:</p>
+<pre><code>
+#!/bin/env bash
+
+[ ! -d $HOME/greaseweazle/images ] && mkdir -p $HOME/greaseweazle/images
+cd $HOME/greaseweazle/images
+
+bash --init-file &lt;(echo "source $HOME/greaseweazle/venv/bin/activate ; gw reset ; gw info")
+</code></pre>
+<p>This enters a new shell with the venv active and already in a directory to store images.</p>
+
+<h2>Testing if the greaseweazle is recognized</h2>
+<p>Attach the device via USB. For me it shows up as <code>/dev/ttyACM0</code></p>
+<pre><code>
+$ gw info
+Host Tools: 1.16
+Device:
+Port:     /dev/ttyACM0
+Model:    Greaseweazle V4
+MCU:      AT32F403, 144MHz, 96kB SRAM
+Firmware: 1.4
+Serial:   GW135194F042054000026C9705
+USB:      Full Speed (12 Mbit/s)
+</code></pre>
+
+<h2>Using the greaseweazle</h2>
+
+<h3>Reading a disk</h3>
+<p>To get more information about possible reading formats and outputs use <code>gw read --help</code></p>
+<p>Reading an msdos 1.44MB HD 3.5" Disk:</p>
+<pre><code>
+$ gw read --format ibm.1440 a.scp
+Reading c=0-79:h=0-1 revs=2
+Format ibm.1440
+T0.0: IBM MFM (18/18 sectors) from Raw Flux (172457 flux in 399.82ms)
+T0.1: IBM MFM (18/18 sectors) from Raw Flux (181444 flux in 399.78ms)
+T1.0: IBM MFM (18/18 sectors) from Raw Flux (154986 flux in 399.83ms)
+T1.1: IBM MFM (18/18 sectors) from Raw Flux (154716 flux in 399.76ms)
+T2.0: IBM MFM (18/18 sectors) from Raw Flux (151418 flux in 399.75ms)
+...
+</code></pre>
+
+<h3>Writing a disk</h3>
+<p>Details for writing a disk...</p>
+
+<h3>Additional</h3>
+<p>Details for additional usage...</p>
+
+</body>
+</html>
