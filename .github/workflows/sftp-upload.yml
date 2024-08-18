@@ -13,8 +13,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install lftp
-        run: sudo apt-get update && sudo apt-get install -y lftp
+      - name: Install tools
+        run: sudo apt-get update && sudo apt-get install -y lftp uglifyjs uglifycss
+
+      - name: Minify JS
+        run: uglifyjs ./html/main.js -o ./html/main.js -c -m
+        
+      - name: Minify CSS
+        run: uglifycss ./html/styles.css > ./html/styles.css.tmp && mv ./html/styles.css.tmp ./html/styles.css
 
       - name: Upload files via SFTP
         env:
