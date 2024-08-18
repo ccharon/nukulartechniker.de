@@ -35,15 +35,14 @@ header h1 {
 
 /* Main content container */
 .content {
-    display: grid;
-    grid-template-columns: 250px 1fr;
-    grid-template-areas: "aside main";
+    display: flex;
+    flex: 1; /* Allow content to grow and fill available space */
     gap: 20px;
     padding: 20px;
 }
 
 section#main {
-    grid-area: main;
+    flex: 1; /* Allow main section to grow and fill available space */
     background: #34495e; /* Dark blue-gray for content sections */
     padding: 20px;
     border-radius: 10px; /* More pronounced rounded corners */
@@ -51,11 +50,11 @@ section#main {
 }
 
 aside {
-    grid-area: aside;
     background: #34495e; /* Dark blue-gray for content sections */
     padding: 20px;
     border-radius: 10px; /* More pronounced rounded corners */
     box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow */
+    width: 250px; /* Fixed width */
 }
 
 aside ul {
@@ -99,16 +98,37 @@ footer {
     box-shadow: 0px -4px 8px rgba(0, 0, 0, 0.3); /* Shadow at the top of the footer */
 }
 
+/* Hide toggle button by default */
+#toggle-aside {
+    display: none;
+}
+
 /* Responsive Layout */
 @media (max-width: 768px) {
     .content {
-        grid-template-columns: 1fr;
-        grid-template-areas:
-            "aside"
-            "main";
+        flex-direction: column;
     }
 
-    aside, section#main {
+    aside {
+        display: none;
+        width: 100%; /* Allow aside to fill the screen width */
+        align-self: start; /* Align aside to the start of the container */
+    }
+
+    aside.show {
+        display: block;
+    }
+
+    #toggle-aside {
+        display: block;
+        background: none;
+        border: none;
+        color: #ecf0f1;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+
+    section#main {
         width: 100%;
     }
 }

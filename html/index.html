@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <title>nukulartechniker.de</title>
+    <title>Nukulartechniker.de</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Nukulartechniker Zitat">
+    <meta name="description" content="Dinge zu alten Computern und rund um Programmierung">
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
-
 <body>
-<header>
+<header role="banner">
     <a href="/"><h1>Nukulartechniker</h1></a>
+    <button id="toggle-aside" aria-label="Toggle Menu">☰</button>
 </header>
 
-<div class="content">
-    <aside>
+<div class="content" role="main">
+    <aside role="complementary">
         <ul>
             <li><a href="?article=1">Article 1</a></li>
             <li><a href="?article=2">Article 2</a></li>
             <li><a href="?article=3">Article 3</a></li>
+            <li><a href="?article=4">Article 4</a></li>
+            <li><a href="?article=5">Article 5</a></li>
         </ul>
     </aside>
 
@@ -27,9 +30,13 @@
     </section>
 </div>
 
-<footer>
+<footer role="contentinfo">
     <p>&copy; 2024, Christian Charon</p>
 </footer>
+
+<noscript>
+    <p>Kein JavaScript ist auch keine L&ouml;sung </p>
+</noscript>
 
 <script src="main.js"></script>
 </body>

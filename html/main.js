@@ -38,3 +38,19 @@ window.addEventListener('DOMContentLoaded', () => {
         showArticle(articleNumber);
     }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleButton = document.getElementById('toggle-aside');
+    const aside = document.querySelector('aside');
+    const links = aside.querySelectorAll('a');
+
+    toggleButton.addEventListener('click', function() {
+        aside.classList.toggle('show');
+    });
+
+    links.forEach(link => {
+        link.addEventListener('click', function() {
+            aside.classList.remove('show');
+        });
+    });
+});
