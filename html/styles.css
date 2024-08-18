@@ -97,3 +97,14 @@ footer {
     font-size: 90%;
     box-shadow: 0px -4px 8px rgba(0, 0, 0, 0.3); /* Shadow at the top of the footer */
 }
+
+/* Media Query for Mobile Devices */
+@media (max-width: 768px) {
+    .content {
+        flex-direction: column;
+    }
+
+    aside, section#main {
+        width: 100%;
+    }
+}
