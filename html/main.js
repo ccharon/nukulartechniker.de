@@ -54,3 +54,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// Add loading class to body when the page starts loading
+document.body.classList.add('loading');
+
+// Remove loading class when the content is fully loaded
+window.addEventListener('load', () => {
+    document.body.classList.remove('loading');
+});

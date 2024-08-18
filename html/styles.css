@@ -21,6 +21,16 @@ body {
     background-repeat: repeat; /* Tile the background image */
 }
 
+/* Hide content when loading */
+body.loading {
+    visibility: hidden;
+}
+
+/* Show content when not loading */
+body.loading * {
+    visibility: visible;
+}
+
 header a:link,
 header a:visited {
     color: inherit; /* Inherit color from parent */
