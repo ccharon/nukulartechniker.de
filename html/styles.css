@@ -80,11 +80,11 @@ aside a {
 aside a:hover {
     background-color: #d35400; /* Darker orange on hover */
     color: #ffffff;
-    transform: scale(1.05); /* Slight scale effect on hover */
+    transform: scale(1.02); /* Slight scale effect on hover */
 }
 
 aside a:active {
-    transform: scale(0.95); /* Slight shrink on click */
+    transform: scale(0.97); /* Slight shrink on click */
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); /* Reduce shadow when clicked */
 }
 
