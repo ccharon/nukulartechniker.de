@@ -1,3 +1,4 @@
+// Fetches and displays an article based on the provided article number, updating the URL and handling errors.
 async function showArticle(articleNumber) {
     // Basic validation to ensure it's a safe filename
     if (!(articleNumber && Number.isInteger(Number(articleNumber)))) {
@@ -30,6 +31,8 @@ async function showArticle(articleNumber) {
     }
 }
 
+// Checks the URL for an article number parameter and loads the
+// corresponding article if present when the DOM content is fully loaded.
 window.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const articleNumber = urlParams.get('article');
@@ -39,6 +42,8 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// Adds event listeners to toggle the visibility of the aside menu on button click
+// and hide the menu when a link inside it is clicked.
 document.addEventListener('DOMContentLoaded', function() {
     const toggleButton = document.getElementById('toggle-aside');
     const aside = document.querySelector('aside');
@@ -53,12 +58,4 @@ document.addEventListener('DOMContentLoaded', function() {
             aside.classList.remove('show');
         });
     });
-});
-
-// Add loading class to body when the page starts loading
-document.body.classList.add('loading');
-
-// Remove loading class when the content is fully loaded
-window.addEventListener('load', () => {
-    document.body.classList.remove('loading');
 });
