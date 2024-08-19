@@ -7,35 +7,47 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<h1>Greaseweazle</h1>
-<p>A Greaseweazle is an open-source hardware + software project for reading and writing floppy disks. It connects via USB and can handle various floppy disk formats. The software is written in Python and can be used on different operating systems.</p>
-<br>
-<h2>Installation under Linux (Gentoo) in a separate python venv</h2>
-
-<pre><code>$ python -m venv $HOME/greaseweazle/venv
+<main>
+    <section>
+        <h1>Greaseweazle</h1>
+        <p>
+            Ein Greaseweazle ist ein Open-Source Hardware- und Softwareprojekt zum Lesen und Schreiben von Disketten.
+            Es wird über USB angeschlossen und kann verschiedene Diskettenformate verarbeiten.
+            Die Software ist in Python geschrieben und kann auf verschiedenen Betriebssystemen verwendet werden.
+            <br>
+        </p>
+    </section>
+    <section>
+        <h2>Installation unter Linux in einer Python VENV</h2>
+        <pre><code>$ python -m venv $HOME/greaseweazle/venv
 $ source $HOME/greaseweazle/venv/bin/activate
 $ pip install git+https://github.com/keirf/greaseweazle@latest
 </code></pre>
-<br>
-<p>To use the now installed <strong><em>gw</em></strong> the venv has to be active. To activate it later use:</p>
-
-<pre><code>$ source $HOME/greaseweazle/bin/activate</code></pre>
-<br>
-<p>Or use a little script, save it as: <strong><em>$HOME/bin/weazle.sh</em></strong>. This enters a new shell with the venv active and already in a directory to store images.</p>
-<pre><code>#!/bin/env bash
+        <br>
+    </section>
+    <section>
+        <p>Um das nun installierte <strong><em>gw</em></strong> zu verwenden, muss die Umgebung aktiv sein. Um sie später zu aktivieren:</p>
+        <pre><code>$ source $HOME/greaseweazle/bin/activate</code></pre>
+        <br>
+    </section>
+    <section>
+        <p>
+            Man kann ein kleines Skript verwenden, speichern als: <strong><em>$HOME/bin/weazle.sh</em></strong>.
+            Das öffnet eine neue Shell mit der aktiven Umgebung in einem Verzeichnis zum Speichern von Images.
+        </p>
+        <pre><code>#!/bin/env bash
 
 [ ! -d $HOME/greaseweazle/images ] && mkdir -p $HOME/greaseweazle/images
 cd $HOME/greaseweazle/images
 
 bash --init-file &lt;(echo "source $HOME/greaseweazle/venv/bin/activate ; gw reset ; gw info")
 </code></pre>
-
-<br>
-
-<h2>Testing if the greaseweazle is recognized</h2>
-<p>Attach the device via USB. For me it shows up as <strong><em>/dev/ttyACM0</em></strong></p>
-
-<pre><code>$ gw info
+        <br>
+    </section>
+    <section>
+        <h2>Testen ob das Greaseweazle erkannt wird</h2>
+        <p>Gerät über USB anschliessen. Es sollte als <strong><em>/dev/ttyACM0</em></strong> auftauchen.</p>
+        <pre><code>$ gw info
 Host Tools: 1.16
 Device:
 Port:     /dev/ttyACM0
@@ -45,15 +57,14 @@ Firmware: 1.4
 Serial:   GW135194F042054000026C9705
 USB:      Full Speed (12 Mbit/s)
 </code></pre>
-<br>
-
-<h2>Using the greaseweazle</h2>
-
-<h3>Reading a disk</h3>
-<p>To get more information about possible reading formats and outputs use <strong><em>gw read --help</em></strong></p>
-<br>
-<p>Reading an msdos 1.44MB HD 3.5" Disk:</p>
-<pre><code>$ gw read --format ibm.1440 a.scp
+        <br>
+    </section>
+    <section>
+        <h2>Verwendung des Greaseweazle</h2>
+        <h3>Eine Diskette lesen</h3>
+        <p>Um mehr Informationen über mögliche Leseformate und Ausgaben zu erhalten, verwendet man <strong><em>gw read --help</em></strong></p>
+        <p>Lesen einer msdos 1,44MB HD 3,5" Diskette:</p>
+        <pre><code>$ gw read --format ibm.1440 a.scp
 Reading c=0-79:h=0-1 revs=2
 Format ibm.1440
 T0.0: IBM MFM (18/18 sectors) from Raw Flux (172457 flux in 399.82ms)
@@ -63,13 +74,18 @@ T1.1: IBM MFM (18/18 sectors) from Raw Flux (154716 flux in 399.76ms)
 T2.0: IBM MFM (18/18 sectors) from Raw Flux (151418 flux in 399.75ms)
 ...
 </code></pre>
-<br>
-
-<h3>Writing a disk</h3>
-<p>Details for writing a disk...</p>
-<br>
-<h3>Additional</h3>
-<p>Details for additional usage...</p>
-<br>
+        <br>
+    </section>
+    <section>
+        <h3>Eine Diskette schreiben</h3>
+        <p>Details zum Schreiben einer Diskette...</p>
+        <br>
+    </section>
+    <section>
+        <h3>Zusätzliches</h3>
+        <p>Details zur zusätzlichen Nutzung...</p>
+        <br>
+    </section>
+</main>
 </body>
 </html>
