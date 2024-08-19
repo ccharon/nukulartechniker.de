@@ -102,6 +102,7 @@ header a:visited {
 }
 
 header h1 {
+    font-size: 1.8rem;
     color: #b0c4de; /* LightSteelBlue accent */
 }
 
