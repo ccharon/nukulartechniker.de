@@ -256,3 +256,36 @@ code {
     font-size: 1rem;
     display: block; /* Ensure the code block takes up the full width */
 }
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.grid-item {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center; /* Center align text */
+}
+
+.grid-item img {
+    width: 100%; /* Make image take the full width of the grid item */
+    height: auto;
+    display: block;
+    margin: 0; /* Remove margin */
+}
+
+.grid-item p {
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: #333;
+}
+
+.grid-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
