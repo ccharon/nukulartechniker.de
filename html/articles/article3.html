@@ -16,9 +16,9 @@
         <p>Verwendung eines Parallelport Iomega Zip Drive 250 mit Linux (Kernel 6.6.41) auf einem modernen PC (2024)</p>
         <br>
         <p>
-            Ich wollte eine altmodische Methode, um "größere" Datenmengen auf einen 386er PC zu übertragen.
-            Da die 386er und 486er Maschinen kein USB haben, dachte ich an Zip Disks. Der 386er hat ein SCSI Zip Laufwerk bekommen. <br><br> Für den modernen PC sollte es erst ein USB-Zip-Laufwerk sein (das ich auch habe und das ohne weitere Einrichtung unter Linux und macOS funktioniert. Unter Windows habe ich es nicht ausprobiert).
-            Aber dann wollte ich wissen, ob es möglich wäre, ein Parallelport-Zip-Laufwerk auch an einem modernen PC zu verwenden? Kurze Antwort: Ja. Lange Antwort: diese Seite.
+            Ich wollte eine altmodische Methode, um "gr&ouml;ßere" Datenmengen auf einen 386er PC zu &uuml;bertragen.
+            Der 386er hat ein SCSI Zip Laufwerk bekommen. <br><br> F&uuml;r den modernen PC sollte es erst ein USB-Zip-Laufwerk sein (das ich auch habe und das ohne weitere Einrichtung unter Linux und macOS funktioniert. Unter Windows habe ich es nicht ausprobiert).
+            Aber dann wollte ich wissen, ob es m&ouml;glich w&auml;re, ein Parallelport Zip-Laufwerk auch an einem modernen PC zu verwenden? <br>Kurze Antwort: Ja. Lange Antwort: diese Seite.
         </p>
         <br>
     </section>
@@ -42,17 +42,17 @@
                 <td><img src="images/article3/pcie-parallel-startech1.webp" alt="PCIE Parallelport-Karte"><br><img src="images/article3/pcie-parallel-startech2.webp" alt="PCIE Parallelport-Karte"></td>
                 <td>
                     Parallelport PCIE Karte<br><br>Ich habe eine "Startech 2S1P Native PCI Express Parallel Serial Combo Card mit 16550 UART" benutzt.
-                    Es ist wichtig, die richtige Karte zu nutzen, sonst hat man nur SPP-Unterstützung oder gar keine Linux-Unterstützung.
-                    Nach dem Lesen einiger CNC-Foren hab ich herausgefunden, dass der MOSCHIP MCS9901 eine gute Wahl ist um EPP-Unterstützung zu erhalten.
+                    Es ist wichtig, die richtige Karte zu nutzen, sonst hat man nur SPP-Unterst&uuml;tzung oder gar keine Linux-Unterst&uuml;tzung.
+                    Nach dem Lesen einiger CNC-Foren hab ich herausgefunden, dass der MOSCHIP MCS9901 eine gute Wahl ist um EPP-Unterst&uuml;tzung zu erhalten.
                 </td>
             </tr>
         </table>
         <p>
-            Die Karte in den PC einbauen und das Parallelport-Kabel mit dem Zip-Laufwerk verbinden. Ich habe einen freien PCIe x16-Steckplatz für die Karte genutzt. Netzteil an das Zip-Laufwerk anschliessen.
-            Die Karte wird vom Kernel erkannt und der Parallelport ist verfügbar. <br><br>
+            Die Karte in den PC einbauen und das Parallelport-Kabel mit dem Zip-Laufwerk verbinden. Ich habe einen freien PCIe x16-Steckplatz f&uuml;r die Karte genutzt. Netzteil an das Zip-Laufwerk anschliessen.
+            Die Karte wird vom Kernel erkannt und der Parallelport ist verf&uuml;gbar. <br><br>
             Mit dieser Karte mit MCS9901-Chipsatz konnte ich den EPP-Modus des Parallelports verwenden. Das macht einen riesen Unterschied in der Geschwindigkeit.
             Im SPP-Modus meldet hdparm -tT etwa 100kB/sec, im EPP-Modus meldet es etwa 330kB/sec!
-            Eine andere Karte mit WCH382L-Chipsatz konnte nur im SPP-Modus verwendet werden obwohl die Karte als EPP-fähig beworben wurde.
+            Eine andere Karte mit WCH382L-Chipsatz konnte nur im SPP-Modus verwendet werden obwohl die Karte als EPP-f&auml;hig beworben wurde.
         </p>
         <br>
     </section>
@@ -61,32 +61,38 @@
         <h2>Die Software</h2>
         <h3>Das erforderliche Kernel-Modul bauen</h3>
         <p>
-            Das Parallelport-Zip-Laufwerk benötigt das <strong><em>imm</em></strong> Kernel-Modul
-            (ältere Versionen benötigen das <strong><em>ppa</em></strong> Modul). <br>
-            Diese Module werden in modernen Distributionen nicht standardmäßig gebaut.
-            Mit Gentoo ist das Hinzufügen eines Kernel-Moduls ziemlich einfach.
-            Ich habe einfach den benötigten Teil der Kernel-Konfiguration zu einer Datei hinzugefügt:<br>
+            Das Parallelport-Zip-Laufwerk ben&ouml;tigt das <strong><em>imm</em></strong> Kernel-Modul
+            (&auml;ltere Versionen ben&ouml;tigen das <strong><em>ppa</em></strong> Modul). <br>
+            Diese Module werden in modernen Distributionen nicht standardm&auml;ßig gebaut.
+            Mit Gentoo ist das Hinzuf&uuml;gen eines Kernel-Moduls ziemlich einfach.
+            Ich habe den ben&ouml;tigten Teil der Kernel-Konfiguration zu einer Datei hinzugef&uuml;gt:<br>
             <strong><em>/etc/kernel/config.d/10iomega.config</em></strong> (Verzeichnis erstellen, falls es nicht existiert)
         </p>
         <pre><code>CONFIG_SCSI_IMM=m</code></pre><br>
-        <p>Danach ist es so einfach wie <code>emerge -1 gentoo-kernel</code> auszuführen, um das Modul verfügbar zu machen.</p>
-        <p>Für andere Distributionen können die Schritte unterschiedlich sein. Hier sind Screenshots der Kernel-Konfiguration:</p>
-        <p><strong>Gerätetreiber &gt; Parallelport-Unterstützung</strong></p>
+        <p>Danach einfach <strong><em>emerge -1 gentoo-kernel</em></strong> ausf&uuml;hren, um das Modul verf&uuml;gbar zu machen.</p>
+        <br>
+        <p>F&uuml;r andere Distributionen k&ouml;nnen die Schritte unterschiedlich sein. Hier sind Screenshots der Kernel-Konfiguration:</p>
+        <p><strong>Device Drivers &gt; Parallel port support</strong></p>
         <img src="images/article3/kernel1.webp" alt="Kernel Config 1">
-        <p><strong>Gerätetreiber &gt; SCSI-Geräteunterstützung &gt; SCSI-Treiber auf niedriger Ebene</strong></p>
+        <br><br>
+        <p><strong>Device Drivers &gt; SCSI device support &gt; SCSI low-level drivers</strong></p>
         <img src="images/article3/kernel2.webp" alt="Kernel Config 2">
-        <p>Nachdem diese Module aktiviert sind, bauen Sie Ihren Kernel neu. Vielleicht gibt es andere Möglichkeiten, die erforderlichen Parallelport- und SCSI-Module zu bauen.</p>
+        <br>
+        <p>Nachdem diese Module aktiviert sind, Kernel mit den Mitteln der Distribution neu bauen.</p>
+        <br>
     </section>
 
     <section>
         <h3>Testen, ob alles funktioniert</h3>
         <p>
-            Wenn der Kernel gebaut ist, können Sie das ZIP-Laufwerk testen. Öffnen Sie ein Terminal und geben Sie <code>journalctl -f</code> ein, um die Kernel-Meldungen zu sehen.
-            Verbinden Sie das Zip-Laufwerk mit dem Parallelport und schalten Sie es ein.
-            Entfernen Sie jede Diskette aus dem Zip-Laufwerk (andere Dokumente schlagen vor, eine Diskette einzulegen, für mich funktioniert es nur, wenn das Laufwerk leer ist).
-            Laden Sie das Modul in einem anderen Terminal als root mit <code>modprobe imm</code> (höchstwahrscheinlich benötigen Sie <code>imm</code>, wenn es nicht funktioniert, versuchen Sie <code>ppa</code>).
+            Wenn der Kernel gebaut ist, kann man das ZIP-Laufwerk testen. Terminal &ouml;ffnen und <strong><em>journalctl -f</em></strong> eingeben,
+            um die Kernel-Meldungen zu sehen. <br>Zip-Laufwerk mit dem Parallelport verbinden und einschalten.
+            ggf. Diskette aus dem Zip-Laufwerk entfernen. Andere Dokumente schlagen vor, eine Diskette einzulegen, f&uuml;r
+            mich funktioniert es nur, wenn das Laufwerk leer ist. Das Modul in einem anderen Terminal als root mit
+            <strong><em>modprobe imm</em></strong> laden. H&ouml;chstwahrscheinlich wird das Modul <strong><em>imm</em></strong> ben&ouml;tigt, wenn es nicht funktioniert <strong><em>ppa</em></strong> versuchen.
         </p>
-        <p>Wenn alles funktioniert, sollten Sie etwas wie das Folgende in der journalctl-Ausgabe sehen:</p>
+        <br>
+        <p>Wenn alles funktioniert, sollte die journalctl Ausgabe so aussehen:</p>
         <pre><code>Jan 01 00:00:00 hostname kernel: imm: Found device at ID 6, Attempting to use EPP 32 bit
 Jan 01 00:00:00 hostname kernel: imm: Communication established at 0x5010 with ID 6 using EPP 32 bit
 Jan 01 00:00:00 hostname kernel: scsi host8: Iomega VPI2 (imm) interface
@@ -96,20 +102,26 @@ Jan 01 00:00:00 hostname kernel: sd 8:0:6:0: Power-on or device reset occurred
 Jan 01 00:00:00 hostname kernel: sd 8:0:6:0: Power-on or device reset occurred
 Jan 01 00:00:00 hostname kernel: sd 8:0:6:0: [sdc] Media removed, stopped polling
 Jan 01 00:00:00 hostname kernel: sd 8:0:6:0: [sdc] Attached SCSI removable disk</code></pre><br>
-        <p>Wenn Sie eine Zip-Diskette einlegen, sollten Sie sie als SCSI-Gerät sehen. In meinem Fall war es <code>/dev/sdc</code>. Eine Zip-Diskette verwendet normalerweise die 4. Partition, daher ist das Gerät, das Sie mounten möchten, <code>/dev/sdc4</code>.</p>
+        <p>
+            Wenn eine Zip-Diskette eingelegt wird, sollte man sie als SCSI-Ger&auml;t sehen.
+            In meinem Fall war es <strong><em>/dev/sdc</em></strong>. <br>Eine Zip-Diskette verwendet normalerweise die 4. Partition,
+            daher ist das Device, das man mounten m&ouml;chte <strong><em>/dev/sdc4</em></strong>.
+        </p>
+        <br>
     </section>
 
     <section>
         <h3>Die Zip-Diskette mounten</h3>
-        <p>Um die Zip-Diskette zu mounten, habe ich einen Eintrag in <code>/etc/fstab</code> hinzugefügt:</p>
+        <p>Um die Zip-Diskette zu mounten, folgenden Eintrag in <strong><em>/etc/fstab</em></strong> hinzugef&uuml;gen:</p>
         <pre><code>/dev/sdc4 /media/zipdrive vfat noauto,rw,user 0 0</code></pre><br>
-        <p>Dies ermöglicht es, die Zip-Diskette als Benutzer zu mounten. Das Zielverzeichnis <code>/media/zipdrive</code> muss erstellt werden.
+        <p>Dies erm&ouml;glicht es, die Zip-Diskette als Benutzer zu mounten. Das Zielverzeichnis <strong><em>/media/zipdrive</em></strong> muss erstellt werden.
             Nun wird ein normaler Benutzer die Zip-Diskette im Dateimanager sehen und kann sie durch Klicken darauf mounten.</p>
+        <br>
     </section>
 
     <section>
-        <h3>Bequeme Aktivierung des Zip-Laufwerks</h3>
-        <p>Ich habe ein kleines Skript erstellt, um das Modul für das Zip-Laufwerk zu laden. Ich habe es in <code>/usr/local/bin/zipdrive.sh</code> platziert:</p>
+        <h3>Bequemes Nutzen des Zip-Laufwerks</h3>
+        <p>Ich habe ein Skript erstellt um das Modul f&uuml;r das Zip-Laufwerk zu laden / entladen. Als <strong><em>/usr/local/bin/zipdrive.sh</em></strong> ablegen:</p>
         <pre><code>#!/bin/env bash
 
 # This script is used to manage a ZIP Drive on a Linux system. It checks if the necessary module and tools
@@ -194,35 +206,40 @@ read -n 1 -s
 }
 
 main "$@" || exit 1</code></pre><br>
-        <p>Nun ist das Verfahren wie folgt:</p>
+        <p>folgendes Vorgehen:</p>
         <ol>
-            <li>Schalten Sie das angeschlossene Zip-Laufwerk ein</li>
-            <li>Führen Sie <code>zipdrive.sh</code> aus</li>
-            <li>Befolgen Sie die Anweisungen</li>
-            <li>Das Zip-Laufwerk sollte im Dateimanager verfügbar sein. Disketten können wie gewohnt gemountet und unmounted oder ausgetauscht werden</li>
-            <li>Um das Zip-Laufwerk zu deaktivieren, hängen Sie alle Disketten aus und entfernen Sie sie, führen Sie <code>zipdrive.sh</code> erneut aus</li>
+            <li>angeschlossenes Zip-Laufwerk einschalten</li>
+            <li><strong><em>zipdrive.sh</em></strong> ausf&uuml;hren </li>
+            <li>Anweisungen befolgen</li>
+            <li>Das Zip-Laufwerk sollte im Dateimanager verf&uuml;gbar sein. Disketten k&ouml;nnen wie gewohnt eingebunden oder entfernt werden</li>
+            <li>Um das Zip-Laufwerk zu deaktivieren, alle Disketten aush&auml;ngen und entfernen, <strong><em>zipdrive.sh</em></strong> erneut ausf&uuml;hren </li>
         </ol>
+        <br>
     </section>
 
     <section>
         <h3>Interessante Befehle</h3>
-        <h4>Die Zip-Diskette auswerfen, wie ein CD-ROM in den guten alten Tagen</h4>
+        <h4>Die Zip-Diskette auswerfen, wie eine CD-ROM in den guten alten Tagen</h4>
         <pre><code># if the zip disk is unmounted you can even use eject to eject the disk :P
 eject /dev/sdc</code></pre><br>
 
-        <h4>Disketten auf fehlerhafte Sektoren überprüfen (zerstört Daten)</h4>
-        <p>BEWARE THIS WILL DESTROY ALL DATA ON THE DISK. USE WITH CAUTION, VERIFY THE DEVICE NAME BEFORE RUNNING THE COMMAND</p>
-        <p>(taken from <a href="https://wiki.archlinux.org/title/badblocks">https://wiki.archlinux.org/title/badblocks</a>)</p>
+        <h4>Disketten auf fehlerhafte Sektoren &uuml;berpr&uuml;fen (zerst&ouml;rt Daten)</h4>
+        <p>VORSICHT! DAS ZER&Ouml;RT ALLE DATEN, DEVICE NAMEN PR&Uuml;FEN!</p>
+        <p>(hier gefunden <a href="https://wiki.archlinux.org/title/badblocks">https://wiki.archlinux.org/title/badblocks</a>)</p>
         <ol>
-            <li>Span a crypto layer above the device: <code>cryptsetup open /dev/sdc zipdisk --type plain --cipher aes-xts-plain64</code></li>
-            <li>Fill the now opened decrypted layer with zeroes, which get written as encrypted data: <code>shred -v -n 0 -z /dev/mapper/zipdisk</code></li>
-            <li>Compare fresh zeroes with the decrypted layer: <code>cmp -b /dev/zero /dev/mapper/zipdisk</code></li>
-            <li>If it just stops with a message about end of file, the drive is fine.</li>
+            <li>Device als verschl&uuml;sselt &ouml;ffnen: <strong><em>cryptsetup open /dev/sdc zipdisk --type plain --cipher aes-xts-plain64</em></strong></li>
+            <li>Auf das entschl&uuml;sselte Device Nullen schreiben, diese werden verschl&uuml;sselt abgelegt: <strong><em>shred -v -n 0 -z /dev/mapper/zipdisk</em></strong></li>
+            <li>Frisch geschriebene Nullen vergleichen: <strong><em>cmp -b /dev/zero /dev/mapper/zipdisk</em></strong></li>
+            <li>Wenn das mit einer Meldung wie end of file endet ist alles in Ordnung</li>
         </ol>
-        <p>This method is also way faster than badblocks even with a single pass. As the command does a full write, any bad sectors (as known to the disk controller) should also be eliminated.</p>
-
-        <h4>Eine Zip-Diskette als FAT16 neu partitionieren und formatieren (funktioniert für 100 und 250 MB Disketten)</h4>
-        <p>BEWARE THIS WILL DESTROY ALL DATA ON THE DISK. USE WITH CAUTION, VERIFY THE DEVICE NAME BEFORE RUNNING THE COMMAND</p>
+        <br>
+        <p>Diese Methode ist viel schneller als badblocks, selbst mit einem einzigen Durchlauf.
+            Da der Befehl einen vollst&auml;ndigen Schreibvorgang durchf&uuml;hrt sollten auch alle fehlerhaften Sektoren
+            (wie sie dem Festplattencontroller bekannt sind) beseitigt werden.
+        </p>
+        <br>
+        <h4>Eine Zip-Diskette als FAT16 neu partitionieren und formatieren (funktioniert f&uuml;r 100 und 250 MB Disketten)</h4>
+        <p>VORSICHT! DAS ZER&Ouml;RT ALLE DATEN, DEVICE NAMEN PR&Uuml;FEN!</p>
         <pre><code># destroy partition table (and wipe vfat signature at beginning of partition4)
 sudo dd if=/dev/zero of=/dev/sdc bs=1M count=1
 # recreate a partition table on the zip disk

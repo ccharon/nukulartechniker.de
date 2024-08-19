@@ -322,16 +322,24 @@ code {
 }
 
 .zipdrive-table td:first-child {
-    width: 25%;
+
 }
 
 .zipdrive-table td:last-child {
-    width: 75%;
+
     vertical-align: top; /* Align text to the top */
 }
 
 .zipdrive-table img {
-    width: 100%;
+    max-width: 250px;
     height: auto;
     border-radius: 5px; /* Rounded corners for images */
+}
+
+ol {
+    padding-left: 40px; /* Add padding to the left to ensure numbers are visible */
+}
+
+ol li {
+    padding-left: 10px; /* Add padding to the left of list items for better readability */
 }
