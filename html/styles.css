@@ -70,11 +70,13 @@ body.loading * {
 /* Header */
 header {
     position: relative;
+    display: flex; /* Align items horizontally */
+    align-items: center; /* Center items vertically */
+    justify-content: center; /* Center the header content */
+    padding: 20px;
     background-image: url('images/circuits.webp'); /* Set background image */
     background-repeat: repeat; /* Tile the background image */
-    padding: 20px;
     color: #ffffff; /* White text color */
-    text-align: center;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
     border-bottom: 2px solid rgba(0, 0, 0, 0.2); /* Border to distinguish from the rest of the page */
 }
@@ -95,6 +97,11 @@ header * {
     z-index: 1;
 }
 
+header .header-container {
+    display: flex; /* Align items horizontally */
+    align-items: center; /* Center items vertically */
+}
+
 header a:link,
 header a:visited {
     color: inherit; /* Inherit color from parent */
@@ -104,6 +111,7 @@ header a:visited {
 header h1 {
     font-size: 1.8rem;
     color: #b0c4de; /* LightSteelBlue accent */
+    margin: 0 0 0 10px;
 }
 
 /* Main content container */
