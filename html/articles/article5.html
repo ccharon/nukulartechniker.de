@@ -3,60 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Article 5</title>
+    <title>Festplatte verschlüsseln</title>
 </head>
 <body>
-<h1>Systemplatte</h1>
-<p>es wird davon ausgegangen das es schon irgendwas installiertes gibt das nicht verschlüsselt ist. Ziel ist es dieses Layout anzulegen:</p>
 
-<pre><code>
-GPT
+<main>
+    <section>
+        <h1>Festplatte verschlüsseln (2024-08-19)</h1>
+        <p>Es wird davon ausgegangen, dass es schon irgendwas installiertes gibt, das nicht verschlüsselt ist. Ziel ist es, dieses Layout anzulegen:</p>
+        <pre><code>GPT
 |
 ├── EFI (fat32)
 |
 ├── boot (ext4)
 |
 └── Luks encrypted
-|
-└── LVM
-|
-├── root (btrfs)
-|
-└── swap (swap)
-</code></pre>
+    |
+    └── LVM
+        |
+        ├── root (btrfs)
+        |
+        └── swap (swap)
+            </code></pre><br>
+        <br>
+    </section>
+    <section>
+        <h2>Booten des Systems per Rettungssystem</h2>
+        <p>irgendwas mit dem man die Sicherung des bisherigen Systems vornehmen kann. Ubuntu Live DVD oder so gemounted nach /backup</p>
+    </section>
+    <section>
+        <h2>Daten sichern</h2>
+        <p>Sichern von boot und root, auf eine externe Platte zu sichernde Dateisysteme mounten dann:</p>
+        <pre><code>mkdir -p /old/efi /old/boot /old/root
 
-<h2>Booten des Systems per Rettungsystem</h2>
-<p>irgendwas mit dem man die Sicherung des bisherigen Systems vornehmen kann. ubuntu live dvd oder so gemouted nach /backup</p>
+# auf mannigfaltige Art und Weise die Dateisysteme unter die Verzeichnisse mounten,
+# wenn es keine boot Partition gibt, einfach auslassen.
 
-<h2>Daten sichern</h2>
-<p>Sichern von boot und root, auf eine externe Platte zu sichernde Dateisysteme mounten dann:</p>
+# evtl. ist es hilfreich zu wissen, wie man LVM Volumes manuell einbindet:
+# falls nötig
+$ apt-get install lvm2
+$ vgscan
 
-<pre><code>
-mkdir -p /old/efi /old/boot /old/root
+# dann die Volume Group(s) aktivieren
+$ vgchange -a y &lt;nameDerVolumeGroup&gt;
 
-# auf mannigfaltige art und weise die dateisysteme unter die verzeichnisse mounten,
-# wenn es keine boot partition gibt, einfach auslassen.
-
-# evtl ist es hilfreich zu wissen wie man lvm volumes manuell einbindet:
-#falls nötig
-apt-get install lvm2
-vgscan
-
-# dann die volume group(s) aktivieren
-vgchange -a y &lt;nameDerVolumeGroup&gt;
-
-# jetzt sind die volumes unter /dev/mapper/ verfügbar
+# jetzt sind die Volumes unter /dev/mapper/ verfügbar
 
 # alles sichern
-cd /old/efi
-tar cvjf /backup/efi.tar.bz2 *
+$ cd /old/efi
+$ tar cvjf /backup/efi.tar.bz2 *
 
-# nur falls man eine boot partition hatte
-cd /old/boot
-tar cvjf /backup/boot.tar.bz2 *
+# nur falls man eine boot Partition hatte
+$ cd /old/boot
+$ tar cvjf /backup/boot.tar.bz2 *
 
-cd /old/root
-tar --exclude=dev/* \
+$ cd /old/root
+$ tar --exclude=dev/* \
 --exclude=proc/* \
 --exclude=sys/* \
 --exclude=tmp/* \
@@ -72,256 +74,219 @@ tar --exclude=dev/* \
 
 # Swap wird nicht gesichert ... warum auch
 
-cd /
-umount /old/boot
-umount /old/efi
-umount /old/root
+$ cd /
+$ umount /old/boot
+$ umount /old/efi
+$ umount /old/root
 
-# ggf. Volumegroup deaktivieren
-vgchange -a n &lt;nameDerVolumeGroup&gt;
-</code></pre>
-
-<h2>Festplatte neu partitionieren</h2>
-<p>ACHTUNG: hier gehen alle Daten flöten, also im Zweifelsfall nochmal die eben erstellten tar Dateien checken</p>
-<p>(500gb ssd die ein bisschen freien platz behält)</p>
-
-<pre><code>
-parted --script /dev/nvme0n1 "mklabel gpt"
+# ggf. Volume Group deaktivieren
+$ vgchange -a n &lt;nameDerVolumeGroup&gt;
+            </code></pre><br>
+    </section>
+    <section>
+        <h2>Festplatte neu partitionieren</h2>
+        <p>ACHTUNG: hier gehen alle Daten flöten, also im Zweifelsfall nochmal die eben erstellten tar Dateien checken</p>
+        <p>(500GB SSD die ein bisschen freien Platz behält)</p>
+        <pre><code>parted --script /dev/nvme0n1 "mklabel gpt"
 
 # 512MB EFI Partition
-parted --script /dev/nvme0n1 "mkpart primary fat32 1MiB 513MiB"
-parted --script /dev/nvme0n1 "set 1 esp on"
+$ parted --script /dev/nvme0n1 "mkpart primary fat32 1MiB 513MiB"
+$ parted --script /dev/nvme0n1 "set 1 esp on"
 
 # 1024MB boot Partition
-parted --script /dev/nvme0n1 "mkpart primary ext4 513MiB 1537MiB"
+$ parted --script /dev/nvme0n1 "mkpart primary ext4 513MiB 1537MiB"
 
 # der Rest wird Luks
-parted --script /dev/nvme0n1 "mkpart primary ext4 1537MiB 394753MiB"
-</code></pre>
+$ parted --script /dev/nvme0n1 "mkpart primary ext4 1537MiB 394753MiB"
+            </code></pre><br>
+    </section>
+    <section>
+        <h2>Verschlüsselung und formatieren</h2>
+        <pre><code># erst mal die EFI Partition formatieren
+$ mkfs.fat -F32 -n EFI /dev/nvme0n1p1
 
-<h2>Verschlüsselung und formatieren</h2>
+# boot Partition formatieren
+$ mkfs.ext4 -L boot -T small /dev/nvme0n1p2
 
-<pre><code>
-# erst mal die efi partition formatieren
-mkfs.fat -F32 -n EFI /dev/nvme0n1p1
+# mit Luks die LVM Partition verschlüsseln
+$ cryptsetup -y -v luksFormat /dev/nvme0n1p3 --hash sha512 --cipher aes-xts-plain64 --key-size 512 --iter-time 10000
 
-# boot partition formatieren
-mkfs.ext4 -L boot -T small /dev/nvme0n1p2
-
-# mit luks die lvm partition verschluesseln
-cryptsetup -y -v luksFormat /dev/nvme0n1p3 --hash sha512 --cipher aes-xts-plain64 --key-size 512 --iter-time 10000
-
-# verschluesselte partition zum formatieren öffnen (die findet man dann unter /dev/mapper/luks-&lt;uuid der partition&gt;)
-cryptsetup luksOpen /dev/nvme0n1p3 luks-`blkid -s UUID -o value /dev/nvme0n1p3`
+# verschlüsselte Partition zum formatieren öffnen (die findet man dann unter /dev/mapper/luks-&lt;uuid der Partition&gt;)
+$ cryptsetup luksOpen /dev/nvme0n1p3 luks-`blkid -s UUID -o value /dev/nvme0n1p3`
 
 # LVM Setup
-pvcreate /dev/mapper/luks-`blkid -s UUID -o value /dev/nvme0n1p3`
-vgcreate system /dev/mapper/luks-`blkid -s UUID -o value /dev/nvme0n1p3`
-lvcreate --name root --size 256G system
-lvcreate --name swap --size 64G system
+$ pvcreate /dev/mapper/luks-`blkid -s UUID -o value /dev/nvme0n1p3`
+$ vgcreate system /dev/mapper/luks-`blkid -s UUID -o value /dev/nvme0n1p3`
+$ lvcreate --name root --size 256G system
+$ lvcreate --name swap --size 64G system
 
 # formatieren des root Dateisystems
-mkfs.btrfs -f -L root /dev/system/root
+$ mkfs.btrfs -f -L root /dev/system/root
 
 # subvolume layout aufbauen
-mount /dev/system/root /mnt
-btrfs subvolume create /mnt/@
-btrfs subvolume create /mnt/@snapshots
-umount /mnt
+$ mount /dev/system/root /mnt
+$ btrfs subvolume create /mnt/@
+$ btrfs subvolume create /mnt/@snapshots
+$ umount /mnt
 
 # swap formatieren
-mkswap /dev/system/swap
+$ mkswap /dev/system/swap
 
-# neue dateisysteme an temporäre stelle mounten
-mkdir -p /new/root
+# neue Dateisysteme an temporäre Stelle mounten
+$ mkdir -p /new/root
 
-mount /dev/system/root /new/root -t btrfs -o subvol=@,compress=zstd
-</code></pre>
+$ mount /dev/system/root /new/root -t btrfs -o subvol=@,compress=zstd
+            </code></pre><br>
+    </section>
+    <section>
+        <h2>Dateisysteme wieder füllen</h2>
+        <pre><code>cd /new/root
+$ tar xpvf /backup/root.tar.bz2 --xattrs-include='*.*' --numeric-owner
 
-<h2>Dateisysteme wieder füllen</h2>
+$ mount /dev/nvme0n1p2 /new/root/boot
+$ cd boot
+$ tar xpvf /backup/boot.tar.bz2 --xattrs-include='*.*' --numeric-owner
 
-<pre><code>
-cd /new/root
-tar xpvf /backup/root.tar.bz2 --xattrs-include='*.*' --numeric-owner
+$ mount /dev/nvme0n1p1 /new/root/boot/efi
+$ cd efi
+$ tar xpvf /backup/efi.tar.bz2 --xattrs-include='*.*' --numeric-owner
+            </code></pre><br>
+    </section>
+    <section>
+        <h2>Jetzt geht es in dem neuen Dateisystem weiter</h2>
+        <pre><code># vorbereiten verschiedener Sachen damit die chroot Umgebung funktioniert
+$ mount --rbind /dev /new/root/dev
+$ mount --make-rslave /new/root/dev
+$ mount -t proc /proc /new/root/proc
+$ mount --rbind /sys /new/root/sys
+$ mount --make-rslave /new/root/sys
+$ mount --rbind /tmp /new/root/tmp
 
-mount /dev/nvme0n1p2 /new/root/boot
-cd boot
-tar xpvf /backup/boot.tar.bz2 --xattrs-include='*.*' --numeric-owner
+$ cp /etc/resolv.conf /new/root/etc/resolv.conf
 
-mount /dev/nvme0n1p1 /new/root/boot/efi
-cd efi
-tar xpvf /backup/efi.tar.bz2 --xattrs-include='*.*' --numeric-owner
-</code></pre>
-
-<h2>jetzt geht es in dem neuen Dateisystem weiter</h2>
-
-<pre><code>
-# vorbeiten verschiedener sachen damit die chroot umgebung funktioniert
-mount --rbind /dev /new/root/dev
-mount --make-rslave /new/root/dev
-mount -t proc /proc /new/root/proc
-mount --rbind /sys /new/root/sys
-mount --make-rslave /new/root/sys
-mount --rbind /tmp /new/root/tmp
-
-cp /etc/resolv.conf /new/root/etc/resolv.conf
-
-chroot /new/root /bin/bash
-source /etc/profile
-</code></pre>
-
-<h2>wieder bootfähig machen</h2>
-<h3>Crypttab anpassen</h3>
-
-<pre><code>
-echo "luks-`blkid -s UUID -o value /dev/nvme0n1p3` UUID=\"`blkid -s UUID -o value /dev/nvme0n1p3`\" none luks,discard" &gt;&gt; /etc/crypttab
-</code></pre>
-
-<h3>fstab anpassen</h3>
-<p>neue Einträge für root, efi und swap hinzufügen</p>
-
-<pre><code>
-# root
-echo "UUID=`blkid -s UUID -o value /dev/system/root`   /  btrfs   defaults,subvol=@,compress=zstd,noatime,autodefrag 0  0" &gt;&gt; /etc/fstab
+$ chroot /new/root /bin/bash
+$ source /etc/profile
+            </code></pre><br>
+    </section>
+    <section>
+        <h2>Wieder bootfähig machen</h2>
+        <h3>Crypttab anpassen</h3>
+        <pre><code>echo "luks-`blkid -s UUID -o value /dev/nvme0n1p3` UUID=\"`blkid -s UUID -o value /dev/nvme0n1p3`\" none luks,discard" &gt;&gt; /etc/crypttab
+            </code></pre><br>
+        <h3>Fstab anpassen</h3>
+        <p>Neue Einträge für root, efi und swap hinzufügen</p>
+        <pre><code># root
+$ echo "UUID=`blkid -s UUID -o value /dev/system/root`   /  btrfs   defaults,subvol=@,compress=zstd,noatime,autodefrag 0  0" &gt;&gt; /etc/fstab
 
 # boot
-echo "UUID=`blkid -s UUID -o value /dev/nvme0n1p2`   /boot  ext4  defaults 0  1" &gt;&gt; /etc/fstab
+$ echo "UUID=`blkid -s UUID -o value /dev/nvme0n1p2`   /boot  ext4  defaults 0  1" &gt;&gt; /etc/fstab
 
 # efi
-echo "UUID=`blkid -s UUID -o value /dev/nvme0n1p1`   /boot/efi  vfat  umask=0077 0  1" &gt;&gt; /etc/fstab
+$ echo "UUID=`blkid -s UUID -o value /dev/nvme0n1p1`   /boot/efi  vfat  umask=0077 0  1" &gt;&gt; /etc/fstab
 
 # swap
-echo "UUID=`blkid -s UUID -o value /dev/system/swap`   none  swap  sw 0  0" &gt;&gt; /etc/fstab
-</code></pre>
-<p>jetzt die fstab mit einem editor öffnen und die alten Werte für root, efi, swap und evtl boot rauswerfen.</p>
+$ echo "UUID=`blkid -s UUID -o value /dev/system/swap`   none  swap  sw 0  0" &gt;&gt; /etc/fstab
+            </code></pre><br>
+        <p>Jetzt die fstab mit einem Editor öffnen und die alten Werte für root, efi, swap und evtl. boot rauswerfen.</p>
+        <h3>Initramfs an die neue Config anpassen</h3>
+        <pre><code>$ apt-get install --reinstall cryptsetup-initramfs
 
-<h3>initramfs an die neue config anpassen</h3>
-
-<pre><code>
-apt-get install --reinstall cryptsetup-initramfs
-
-echo "RESUME=/dev/ares/swap" &gt; /etc/initramfs-tools/conf.d/resume
-echo "UMASK=0077" &gt;&gt; /etc/initramfs-tools/initramfs.conf
-</code></pre>
-
-<h3>grub.cfg auf der EFI Partition ersetzen</h3>
-
-<pre><code>
-# grub.cfg anpassen damit verschluesselte partitionen beachtet werden
-echo "GRUB_ENABLE_CRYPTODISK=y" &gt;&gt; /etc/default/grub
+$ echo "RESUME=/dev/ares/swap" &gt; /etc/initramfs-tools/conf.d/resume
+$ echo "UMASK=0077" &gt;&gt; /etc/initramfs-tools/initramfs.conf
+            </code></pre><br>
+        <h3>Grub.cfg auf der EFI Partition ersetzen</h3>
+        <pre><code># grub.cfg anpassen damit verschlüsselte Partitionen beachtet werden
+$ echo "GRUB_ENABLE_CRYPTODISK=y" &gt;&gt; /etc/default/grub
 
 # grub installieren
-grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=debian
-grub-mkconfig -o /boot/grub/grub.cfg
-</code></pre>
-<p>jetzt kann man neustarten!</p>
+$ grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=debian
+$ grub-mkconfig -o /boot/grub/grub.cfg
+            </code></pre><br>
+        <p>Jetzt kann man neustarten!</p>
+    </section>
+    <section>
+        <h2>Nach dem Neustart noch Snapper konfigurieren</h2>
+        <h3>/etc/fstab Eintrag für Subvolume @snapshots</h3>
+        <pre><code>$ echo "UUID=`blkid -s UUID -o value /dev/system/root`   /.snapshots  btrfs   subvol=@snapshots,defaults,compress=zstd,noatime,autodefrag  0  0" &gt;&gt; /etc/fstab
+            </code></pre><br>
+        <h3>Snapper installieren und Config anlegen</h3>
+        <pre><code>$ apt-get install snapper
+$ snapper -c root create-config /
+            </code></pre><br>
+        <p>Das Verzeichnis, das Snapper angelegt hat, löschen und neu anlegen</p>
+        <pre><code>$ rm -rf /.snapshots
+$ mkdir /.snapshots
+$ rm -rf /.snapshots
+$ mount /.snapshots
+            </code></pre><br>
+    </section>
+    <section>
+        <h1>Datenfestplatten</h1>
+        <h2>Festplatten partitionieren</h2>
+        <pre><code>$ parted --script /dev/sda "mklabel gpt"
+$ parted --script /dev/sda "mkpart primary 1 100%"
 
-<h2>nach dem neustart noch snapper konfigurieren</h2>
-<h3>/etc/fstab Eintrag für Subvolume @snapshots</h3>
-
-<pre><code>
-echo "UUID=`blkid -s UUID -o value /dev/system/root`   /.snapshots  btrfs   subvol=@snapshots,defaults,compress=zstd,noatime,autodefrag  0  0" &gt;&gt; /etc/fstab
-</code></pre>
-<h3>snapper installieren und config anlegen</h3>
-
-<pre><code>
-apt-get install snapper
-snapper -c root create-config /
-</code></pre>
-<p>das Verzeichnis das Snapper angelegt hat löschen und neu anlegen</p>
-
-<pre><code>
-rm -rf /.snapshots
-mkdir /.snapshots
-rm -rf /.snapshots
-mount /.snapshots
-</code></pre>
-
-<h1>Datenfestplatten</h1>
-<h2>Festplatten partitionieren</h2>
-
-<pre><code>
-parted --script /dev/sda "mklabel gpt"
-parted --script /dev/sda "mkpart primary 1 100%"
-
-parted --script /dev/sdb "mklabel gpt"
-parted --script /dev/sdb "mkpart primary 1 100%"
-</code></pre>
-
-<h2>Cryptsetup</h2>
-<h3>Partition verschlüsseln</h3>
-
-<pre><code>
-cryptsetup -y -v luksFormat /dev/sda1 --hash sha512 --cipher aes-xts-plain64 --key-size 512 --iter-time 10000
-cryptsetup -y -v luksFormat /dev/sdb1 --hash sha512 --cipher aes-xts-plain64 --key-size 512 --iter-time 10000
-</code></pre>
-<h3>Keyfile generieren</h3>
-
-<pre><code>
-mkdir /etc/luks-keys/; dd if=/dev/urandom of=/etc/luks-keys/phobos bs=64 count=1
+$ parted --script /dev/sdb "mklabel gpt"
+$ parted --script /dev/sdb "mkpart primary 1 100%"
+            </code></pre><br>
+    </section>
+    <section>
+        <h2>Cryptsetup</h2>
+        <h3>Partition verschlüsseln</h3>
+        <pre><code>$ cryptsetup -y -v luksFormat /dev/sda1 --hash sha512 --cipher aes-xts-plain64 --key-size 512 --iter-time 10000
+$ cryptsetup -y -v luksFormat /dev/sdb1 --hash sha512 --cipher aes-xts-plain64 --key-size 512 --iter-time 10000
+            </code></pre><br>
+        <h3>Keyfile generieren</h3>
+        <pre><code>mkdir /etc/luks-keys/; dd if=/dev/urandom of=/etc/luks-keys/phobos bs=64 count=1
 mkdir /etc/luks-keys/; dd if=/dev/urandom of=/etc/luks-keys/deimos bs=64 count=1
 chmod 0400 /etc/luks-keys/*
-</code></pre>
-<h3>Key zu verschluesseltem Volume hinzufuegen</h3>
-
-<pre><code>
-cryptsetup luksAddKey /dev/sda1 --key-size 512 --iter-time 2000 --hash sha512 /etc/luks-keys/phobos
+            </code></pre><br>
+        <h3>Key zu verschlüsseltem Volume hinzufügen</h3>
+        <pre><code>cryptsetup luksAddKey /dev/sda1 --key-size 512 --iter-time 2000 --hash sha512 /etc/luks-keys/phobos
 cryptsetup luksAddKey /dev/sdb1 --key-size 512 --iter-time 2000 --hash sha512 /etc/luks-keys/deimos
-</code></pre>
-<h3>Crypttab anpassen</h3>
-
-<pre><code>
-echo "phobos UUID=\"`blkid -s UUID -o value /dev/sda1`\" /etc/luks-keys/phobos luks,key-slot=1" &gt;&gt; /etc/crypttab
+            </code></pre><br>
+        <h3>Crypttab anpassen</h3>
+        <pre><code>echo "phobos UUID=\"`blkid -s UUID -o value /dev/sda1`\" /etc/luks-keys/phobos luks,key-slot=1" &gt;&gt; /etc/crypttab
 echo "deimos UUID=\"`blkid -s UUID -o value /dev/sdb1`\" /etc/luks-keys/deimos luks,key-slot=1" &gt;&gt; /etc/crypttab
-</code></pre>
-<h3>Cryptdisks starten</h3>
-
-<pre><code>
-cryptdisk_start phobos deimos
-</code></pre>
-
-<h2>dateisysteme erzeugen</h2>
-
-<pre><code>
-mkfs.btrfs -f -L vault -m raid1 -d raid1 /dev/mapper/phobos /dev/mapper/phobos
-</code></pre>
-
-<h3>subvolume layout aufbauen</h3>
-<p>Um sicherzustellen das man an die Snapshots rankommt wenn das eigentliche Volume Probleme hat kommt das Snapshot Subvolume @snapshots auf das gleiche Level wie das eigentliche Daten Subvolume (@) später wird dann @snapshots unter ./snapshots ins Datenvolume gemounted</p>
-
-<pre><code>
-subvolid=5
+            </code></pre><br>
+        <h3>Cryptdisks starten</h3>
+        <pre><code>cryptdisk_start phobos deimos
+            </code></pre><br>
+    </section>
+    <section>
+        <h2>Dateisysteme erzeugen</h2>
+        <pre><code>mkfs.btrfs -f -L vault -m raid1 -d raid1 /dev/mapper/phobos /dev/mapper/phobos
+            </code></pre><br>
+        <h3>Subvolume Layout aufbauen</h3>
+        <p>Um sicherzustellen, dass man an die Snapshots rankommt, wenn das eigentliche Volume Probleme hat, kommt das Snapshot Subvolume @snapshots auf das gleiche Level wie das eigentliche Daten Subvolume (@). Später wird dann @snapshots unter ./snapshots ins Datenvolume gemounted.</p>
+        <pre><code>subvolid=5
 |
 ├── @
-|       |
-|       ├── /.snapshots
-|       |
-|       ├── /daten
-|       |
-|       ├── blubbb
-|       |
-|       ├── ...
+|   |
+|   ├── /.snapshots
+|   |
+|   ├── /daten
+|   |
+|   ├── blubbb
+|   |
+|   ├── ...
 |
 ├── @snapshots
 |
 └── @...
-</code></pre>
+</code></pre><br>
 <p>also los: Ein btrfs raid1 kann man mounten indem man einfach ein device des raids mounted, in der fstab wird später auf nummer sicher gegangen.</p>
-
-<pre><code>
-mount /dev/mapper/phobos /mnt
-
-# zwischendurch kann man einfach mal schauen ob das anlegen des Dateisystems soweit gut war. es müsste Data, Metadata und System RAID1 dabei sein
+        <pre><code>mount /dev/mapper/phobos /mnt
+            </code></pre><br>
+# zwischendurch kann man einfach mal schauen, ob das Anlegen des Dateisystems soweit gut war. Es müsste Data, Metadata und System RAID1 dabei sein
 btrfs fi usage /vault
 
 btrfs subvolume create /mnt/@
 btrfs subvolume create /mnt/@snapshots
 umount /mnt
-</code></pre>
-
-<h3>Mountpunkte in der richtigen Reihenfolge anlegen und snapper konfigurieren</h3>
-
-<pre><code>
+            </code></pre><br>
+        <h3>Mountpunkte in der richtigen Reihenfolge anlegen und Snapper konfigurieren</h3>
+        <pre><code>
 # Mountpunkt anlegen
 mkdir /vault
 
@@ -329,62 +294,62 @@ mkdir /vault
 echo "UUID=`blkid -s UUID -o value /dev/mapper/phobos`   /vault  btrfs   subvol=@,device=/dev/mapper/deimos,device=/dev/mapper/phobos,defaults,rw,user,nofail,nodev,nosuid,noexec,noatime,autodefrag  0  0" &gt;&gt; /etc/fstab
 
 # /etc/fstab Eintrag für Subvolume @snapshots
-echo "UUID=`blkid -s UUID -o value /dev/mapper/phobos`   /vault/.snapshots  btrfs  \
-    subvol=@snapshots,device=/dev/mapper/deimos,device=/dev/mapper/phobos,defaults,rw,user,nofail,nodev,nosuid,noexec,noatime,autodefrag  0  0" &gt;&gt; /etc/fstab
+echo "UUID=`blkid -s UUID -o value /dev/mapper/phobos`   /vault/.snapshots  btrfs  subvol=@snapshots,device=/dev/mapper/deimos,device=/dev/mapper/phobos,defaults,rw,user,nofail,nodev,nosuid,noexec,noatime,autodefrag  0  0" &gt;&gt; /etc/fstab
 
 # jetzt Datenvolume mounten und Berechtigungen anpassen
 mount /vault
 chown root:users /vault/.
 chmod 0770 /vault/.
 
-# snapper installieren und config anlegen
+# Snapper installieren und Config anlegen
 apt-get install snapper
 snapper -c vault create-config /vault
 
-# das Verzeichnis das Snapper angelegt hat löschen
+# das Verzeichnis, das Snapper angelegt hat, löschen
 rm -rf /vault/.snapshots
 
-# und neu anlegen und jetzt das subvolume reinmounten
+# und neu anlegen und jetzt das Subvolume reinmounten
 mkdir /vault/.snapshots
 mount /vault/.snapshots
 chmod 0750 /vault/.snapshots
 chown root:users /vault/.snapshots
 
-# falls der normale Benutzer noch nicht in der users gruppe ist ...
+# falls der normale Benutzer noch nicht in der users Gruppe ist ...
 usermod -a -G users username
-</code></pre>
-
-<h2>regelmäßiges Dateisystem aufräumen (scrub)</h2>
-<p>apt-get install btrfsmaintenance</p>
-<p>dann die /etc/default/btrfsmaintenance anpassen https://github.com/kdave/btrfsmaintenance/blob/master/README.md</p>
-
-<h2>was kann man noch machen</h2>
-<p>snapper-gui installieren</p>
-
-<pre><code>
+            </code></pre><br>
+    </section>
+    <section>
+        <h2>Regelmäßiges Dateisystem aufräumen (scrub)</h2>
+        <p>apt-get install btrfsmaintenance</p>
+        <p>dann die /etc/default/btrfsmaintenance anpassen https://github.com/kdave/btrfsmaintenance/blob/master/README.md</p>
+    </section>
+    <section>
+        <h2>Was kann man noch machen</h2>
+        <p>snapper-gui installieren</p>
+        <pre><code>
 apt-get install snapper-gui
-</code></pre>
-
-<h2>backups mit snap-sync</h2>
-<p>Einen Backup Datenträger mit btrfs formatieren und mounten</p>
-
-<pre><code>
+            </code></pre><br>
+    </section>
+    <section>
+        <h2>Backups mit snap-sync</h2>
+        <p>Einen Backup Datenträger mit btrfs formatieren und mounten</p>
+        <pre><code>
 # partitionieren
-parted --script /dev/sdc "mklabel gpt"
-parted --script /dev/sdc "mkpart primary 1 100%"
+$ parted --script /dev/sdc "mklabel gpt"
+$ parted --script /dev/sdc "mkpart primary 1 100%"
 
 # verschlüsseln
-cryptsetup -y -v luksFormat /dev/sdc1 --hash sha512 --cipher aes-xts-plain64 --key-size 512 --iter-time 10000
+$ cryptsetup -y -v luksFormat /dev/sdc1 --hash sha512 --cipher aes-xts-plain64 --key-size 512 --iter-time 10000
 
 # verschlüsseltes Volume öffnen
-cryptsetup luksOpen /dev/sdc1 backup
+$ cryptsetup luksOpen /dev/sdc1 backup
 
 # formatieren
-mkfs.btrfs -f -L backup /dev/mapper/backup
+$ mkfs.btrfs -f -L backup /dev/mapper/backup
 
 # mounten
-mount /dev/mapper/backup /mnt
-</code></pre>
+$ mount /dev/mapper/backup /mnt
+</code></pre><br>
 <p>Snapsync herunterladen https://github.com/wesbarnett/snap-sync/releases entpacken und als root make install ausführen Dann kann man die btrfs Dateisysteme mit incrementellen Snapshots sichern</p>
 
 <pre><code>
@@ -396,12 +361,12 @@ snap-sync -c root -u `blkid -s UUID -o value /dev/mapper/backup`
 # wenn fertig
 umount /mnt
 cryptsetup luksClose /dev/mapper/backup
-</code></pre>
-
+</code></pre><br>
+        </section>
 <h2>quellen aus denen ich das hab</h2>
 <p>https://computingforgeeks.com/working-with-btrfs-filesystem-in-linux/</p>
 <p>https://blog.bmarwell.de/zwei-festplatten-in-einem-btrfs-raid1-zusammenfuehren/</p>
 <p>https://wiki.archlinux.org/index.php/Snapper</p>
-
+</main>
 </body>
 </html>
