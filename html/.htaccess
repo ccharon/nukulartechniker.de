@@ -9,9 +9,6 @@ RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
     Header set X-Content-Type-Options "nosniff"
     Header set X-Frame-Options "DENY"
     Header set X-XSS-Protection "1; mode=block"
-    Header set Strict-Transport-Security "max-age=31536000; includeSubDomains"  # Enforce HTTPS
-    Header set Referrer-Policy "no-referrer-when-downgrade"  # Control referrer information
-    Header set Feature-Policy "geolocation 'none'; microphone 'none'; camera 'none'"  # Control features and APIs
 
     # Ensure Vary header is set for proper caching
     Header append Vary Accept-Encoding
