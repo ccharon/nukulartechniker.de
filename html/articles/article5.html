@@ -11,7 +11,9 @@
     <section>
         <p>2024-08-19</p>
         <h1>Festplatte verschlüsseln</h1>
-        <p>Es wird davon ausgegangen, dass es schon irgendwas installiertes gibt, das nicht verschlüsselt ist. Ziel ist es, dieses Layout anzulegen:</p>
+        <p>Es wird davon ausgegangen, dass es schon irgendwas installiertes gibt, das nicht verschlüsselt ist. Ziel ist es, dieses Layout anzulegen.</p>
+        <br>
+        <p class="code-topic">Ziel Layout</p>
         <pre><code>GPT
 |
 ├── EFI (fat32)
@@ -35,6 +37,8 @@
     <section>
         <h2>Daten sichern</h2>
         <p>Sichern von boot und root, auf eine externe Platte zu sichernde Dateisysteme mounten dann:</p>
+        <br>
+        <p class="code-topic">Daten sichern</p>
         <pre><code>mkdir -p /old/efi /old/boot /old/root
 
 # auf mannigfaltige Art und Weise die Dateisysteme unter die Verzeichnisse mounten,
@@ -86,8 +90,10 @@ $ vgchange -a n &lt;nameDerVolumeGroup&gt;
     </section>
     <section>
         <h2>Festplatte neu partitionieren</h2>
-        <p>ACHTUNG: hier gehen alle Daten flöten, also im Zweifelsfall nochmal die eben erstellten tar Dateien checken</p>
-        <p>(500GB SSD die ein bisschen freien Platz behält)</p>
+        <p>ACHTUNG: hier gehen alle Daten verloren, also im Zweifelsfall nochmal die eben erstellten tar Dateien checken</p>
+        <p>(500GB SSD die ein bisschen freien Platz beh&auml;lt)</p>
+        <br>
+        <p class="code-topic">Partitonieren</p>
         <pre><code>parted --script /dev/nvme0n1 "mklabel gpt"
 
 # 512MB EFI Partition
@@ -103,6 +109,8 @@ $ parted --script /dev/nvme0n1 "mkpart primary ext4 1537MiB 394753MiB"
     </section>
     <section>
         <h2>Verschlüsselung und formatieren</h2>
+        <br>
+        <p class="code-topic">Verschlüsselung und formatieren</p>
         <pre><code># erst mal die EFI Partition formatieren
 $ mkfs.fat -F32 -n EFI /dev/nvme0n1p1
 
@@ -140,7 +148,9 @@ $ mount /dev/system/root /new/root -t btrfs -o subvol=@,compress=zstd
             </code></pre><br>
     </section>
     <section>
-        <h2>Dateisysteme wieder füllen</h2>
+        <h2>Dateisysteme wieder f&uuml;llen</h2>
+        <br>
+        <p class="code-topic">Backup wiederherstellen</p>
         <pre><code>cd /new/root
 $ tar xpvf /backup/root.tar.bz2 --xattrs-include='*.*' --numeric-owner
 
@@ -155,6 +165,8 @@ $ tar xpvf /backup/efi.tar.bz2 --xattrs-include='*.*' --numeric-owner
     </section>
     <section>
         <h2>Jetzt geht es in dem neuen Dateisystem weiter</h2>
+        <br>
+        <p class="code-topic">Chroot</p>
         <pre><code># vorbereiten verschiedener Sachen damit die chroot Umgebung funktioniert
 $ mount --rbind /dev /new/root/dev
 $ mount --make-rslave /new/root/dev
@@ -172,10 +184,14 @@ $ source /etc/profile
     <section>
         <h2>Wieder bootfähig machen</h2>
         <h3>Crypttab anpassen</h3>
+        <br>
+        <p class="code-topic">Crypttab aktualisieren</p>
         <pre><code>echo "luks-`blkid -s UUID -o value /dev/nvme0n1p3` UUID=\"`blkid -s UUID -o value /dev/nvme0n1p3`\" none luks,discard" &gt;&gt; /etc/crypttab
             </code></pre><br>
         <h3>Fstab anpassen</h3>
         <p>Neue Einträge für root, efi und swap hinzufügen</p>
+        <br>
+        <p class="code-topic">/etc/fstab anpassen</p>
         <pre><code># root
 $ echo "UUID=`blkid -s UUID -o value /dev/system/root`   /  btrfs   defaults,subvol=@,compress=zstd,noatime,autodefrag 0  0" &gt;&gt; /etc/fstab
 
@@ -320,7 +336,7 @@ usermod -a -G users username
             </code></pre><br>
     </section>
     <section>
-        <h2>Regelmäßiges Dateisystem aufräumen (scrub)</h2>
+        <h2>Regelm&auml;&szlig;iges Dateisystem aufr&auml;umen (scrub)</h2>
         <p>apt-get install btrfsmaintenance</p>
         <p>dann die /etc/default/btrfsmaintenance anpassen https://github.com/kdave/btrfsmaintenance/blob/master/README.md</p>
     </section>

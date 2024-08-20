@@ -129,7 +129,7 @@ section#main {
     border-radius: 10px; /* More pronounced rounded corners */
     box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1); /* Slightly stronger shadow */
     width: 100%;
-    max-width: 100%; /* Ensure the main section does not exceed the width of its parent */
+    max-width: 1280px; /* Sensible maximum width */
     box-sizing: border-box; /* Include padding and border in the element's total width */
     overflow-x: hidden;
 }
@@ -252,15 +252,27 @@ footer a:visited {
     }
 }
 
+/* zusammen mit pre ergibt das eine  nette box fuer code beispiele */
+.code-topic {
+    background-color: #b0c4de; /* LightSteelBlue background color */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    font-weight: bold;
+    border-top-left-radius: 5px; /* Rounded upper left edge */
+    border-top-right-radius: 5px; /* Rounded upper right edge */
+}
+
 pre {
     background-color: #2d2d2d;
     color: #f8f8f2;
     padding: 10px;
-    border-radius: 5px;
     white-space: pre;
     overflow-x: auto;
     max-width: 100%; /* Ensure the pre element does not exceed the width of its parent */
     box-sizing: border-box; /* Include padding and border in the element's total width */
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 
 code {

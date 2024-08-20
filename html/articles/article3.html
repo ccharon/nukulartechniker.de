@@ -16,7 +16,7 @@
         <p>Verwendung eines Parallelport Iomega Zip Drive 250 mit Linux (Kernel 6.6.41) auf einem modernen PC (2024)</p>
         <br>
         <p>
-            Ich wollte eine altmodische Methode, um "gr&ouml;ßere" Datenmengen auf einen 386er PC zu &uuml;bertragen.
+            Ich wollte eine altmodische Methode, um "gr&ouml;&szlig;ere" Datenmengen auf einen 386er PC zu &uuml;bertragen.
             Der 386er hat ein SCSI Zip Laufwerk bekommen. <br><br> F&uuml;r den modernen PC sollte es erst ein USB-Zip-Laufwerk sein (das ich auch habe und das ohne weitere Einrichtung unter Linux und macOS funktioniert. Unter Windows habe ich es nicht ausprobiert).
             Aber dann wollte ich wissen, ob es m&ouml;glich w&auml;re, ein Parallelport Zip-Laufwerk auch an einem modernen PC zu verwenden? <br>Kurze Antwort: Ja. Lange Antwort: diese Seite.
         </p>
@@ -61,17 +61,20 @@
         <h2>Die Software</h2>
         <h3>Das erforderliche Kernel-Modul bauen</h3>
         <p>
-            Das Parallelport-Zip-Laufwerk ben&ouml;tigt das <strong><em>imm</em></strong> Kernel-Modul
-            (&auml;ltere Versionen ben&ouml;tigen das <strong><em>ppa</em></strong> Modul). <br>
-            Diese Module werden in modernen Distributionen nicht standardm&auml;ßig gebaut.
+            Das Parallelport-Zip-Laufwerk ben&ouml;tigt das <strong><em>imm</em></strong> Kernel-Modul, &auml;ltere
+            Versionen ben&ouml;tigen das <strong><em>ppa</em></strong> Modul. <br><br>
+            Diese Module werden in modernen Distributionen nicht standardm&auml;&szlig;ig gebaut.
             Mit Gentoo ist das Hinzuf&uuml;gen eines Kernel-Moduls ziemlich einfach.
-            Ich habe den ben&ouml;tigten Teil der Kernel-Konfiguration zu einer Datei hinzugef&uuml;gt:<br>
-            <strong><em>/etc/kernel/config.d/10iomega.config</em></strong> (Verzeichnis erstellen, falls es nicht existiert)
+            Ich habe den ben&ouml;tigten Teil der Kernel-Konfiguration zu einer Datei hinzugef&uuml;gt.
+            Verzeichnis erstellen, falls es nicht existiert.
         </p>
+        <br>
+        <p class="code-topic">/etc/kernel/config.d/10iomega.config</p>
         <pre><code>CONFIG_SCSI_IMM=m</code></pre><br>
         <p>Danach einfach <strong><em>emerge -1 gentoo-kernel</em></strong> ausf&uuml;hren, um das Modul verf&uuml;gbar zu machen.</p>
         <br>
-        <p>F&uuml;r andere Distributionen k&ouml;nnen die Schritte unterschiedlich sein. Hier sind Screenshots der Kernel-Konfiguration:</p>
+        <p>F&uuml;r andere Distributionen k&ouml;nnen die Schritte unterschiedlich sein. Hier sind Screenshots der Kernel-Konfiguration.</p>
+        <br>
         <p><strong>Device Drivers &gt; Parallel port support</strong></p>
         <img src="images/article3/kernel1.webp" alt="Kernel Config 1">
         <br><br>
@@ -92,7 +95,7 @@
             <strong><em>modprobe imm</em></strong> laden. H&ouml;chstwahrscheinlich wird das Modul <strong><em>imm</em></strong> ben&ouml;tigt, wenn es nicht funktioniert <strong><em>ppa</em></strong> versuchen.
         </p>
         <br>
-        <p>Wenn alles funktioniert, sollte die journalctl Ausgabe so aussehen:</p>
+        <p class="code-topic">Wenn alles funktioniert, sollte die journalctl Ausgabe so aussehen</p>
         <pre><code>Jan 01 00:00:00 hostname kernel: imm: Found device at ID 6, Attempting to use EPP 32 bit
 Jan 01 00:00:00 hostname kernel: imm: Communication established at 0x5010 with ID 6 using EPP 32 bit
 Jan 01 00:00:00 hostname kernel: scsi host8: Iomega VPI2 (imm) interface
@@ -112,7 +115,8 @@ Jan 01 00:00:00 hostname kernel: sd 8:0:6:0: [sdc] Attached SCSI removable disk<
 
     <section>
         <h3>Die Zip-Diskette mounten</h3>
-        <p>Um die Zip-Diskette zu mounten, folgenden Eintrag in <strong><em>/etc/fstab</em></strong> hinzugef&uuml;gen:</p>
+        <p>Um die Zip-Diskette zu mounten, folgenden Eintrag in <strong><em>/etc/fstab</em></strong> hinzugef&uuml;gen.</p>
+        <p class="code-topic">Eintrag in /etc/fstab</p>
         <pre><code>/dev/sdc4 /media/zipdrive vfat noauto,rw,user 0 0</code></pre><br>
         <p>Dies erm&ouml;glicht es, die Zip-Diskette als Benutzer zu mounten. Das Zielverzeichnis <strong><em>/media/zipdrive</em></strong> muss erstellt werden.
             Nun wird ein normaler Benutzer die Zip-Diskette im Dateimanager sehen und kann sie durch Klicken darauf mounten.</p>
@@ -121,7 +125,8 @@ Jan 01 00:00:00 hostname kernel: sd 8:0:6:0: [sdc] Attached SCSI removable disk<
 
     <section>
         <h3>Bequemes Nutzen des Zip-Laufwerks</h3>
-        <p>Ich habe ein Skript erstellt um das Modul f&uuml;r das Zip-Laufwerk zu laden / entladen. Als <strong><em>/usr/local/bin/zipdrive.sh</em></strong> ablegen:</p>
+        <p>Skript um das Modul f&uuml;r das Zip-Laufwerk zu laden / entladen. Als <strong><em>/usr/local/bin/zipdrive.sh</em></strong> ablegen.</p>
+        <p class="code-topic">/usr/local/bin/zipdrive.sh</p>
         <pre><code>#!/bin/env bash
 
 # This script is used to manage a ZIP Drive on a Linux system. It checks if the necessary module and tools
@@ -220,11 +225,12 @@ main "$@" || exit 1</code></pre><br>
     <section>
         <h3>Interessante Befehle</h3>
         <h4>Die Zip-Diskette auswerfen, wie eine CD-ROM in den guten alten Tagen</h4>
-        <pre><code># if the zip disk is unmounted you can even use eject to eject the disk :P
-eject /dev/sdc</code></pre><br>
+        <p class="code-topic">ZIP Disk auswerfen</p>
+        <pre><code>$ eject /dev/sdc
+        </code></pre><br>
 
         <h4>Disketten auf fehlerhafte Sektoren &uuml;berpr&uuml;fen (zerst&ouml;rt Daten)</h4>
-        <p>VORSICHT! DAS ZER&Ouml;RT ALLE DATEN, DEVICE NAMEN PR&Uuml;FEN!</p>
+        <p>VORSICHT! DAS ZERST&Ouml;RT ALLE DATEN, DEVICE NAMEN PR&Uuml;FEN!</p>
         <p>(hier gefunden <a href="https://wiki.archlinux.org/title/badblocks">https://wiki.archlinux.org/title/badblocks</a>)</p>
         <ol>
             <li>Device als verschl&uuml;sselt &ouml;ffnen: <strong><em>cryptsetup open /dev/sdc zipdisk --type plain --cipher aes-xts-plain64</em></strong></li>
@@ -239,7 +245,8 @@ eject /dev/sdc</code></pre><br>
         </p>
         <br>
         <h4>Eine Zip-Diskette als FAT16 neu partitionieren und formatieren (funktioniert f&uuml;r 100 und 250 MB Disketten)</h4>
-        <p>VORSICHT! DAS ZER&Ouml;RT ALLE DATEN, DEVICE NAMEN PR&Uuml;FEN!</p>
+        <p>VORSICHT! DAS ZERST&Ouml;RT ALLE DATEN, DEVICE NAMEN PR&Uuml;FEN!</p>
+        <p class="code-topic">ZIP Disk (neu) formatieren</p>
         <pre><code># destroy partition table (and wipe vfat signature at beginning of partition4)
 sudo dd if=/dev/zero of=/dev/sdc bs=1M count=1
 # recreate a partition table on the zip disk
