@@ -308,12 +308,14 @@ code {
     background-color: rgba(255, 255, 255, 0.9); /* White background with 90% opacity */
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
     border-radius: 10px; /* Rounded corners */
+    table-layout: auto; /* Allow table to shrink to fit the viewport */
 }
 
 .zipdrive-table th, .zipdrive-table td {
-    border: 1px solid #ccc; /* Light gray border */
-    padding: 10px; /* Padding for better readability */
-    text-align: left; /* Align text to the left */
+    padding: 10px; /* Add padding for better readability */
+    border: 1px solid #ddd; /* Add border to table cells */
+    word-wrap: break-word; /* Allow long words to break and wrap to the next line */
+    overflow: hidden; /* Hide overflow content */
 }
 
 .zipdrive-table th {
