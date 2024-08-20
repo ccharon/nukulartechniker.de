@@ -116,6 +116,7 @@ Jan 01 00:00:00 hostname kernel: sd 8:0:6:0: [sdc] Attached SCSI removable disk<
     <section>
         <h3>Die Zip-Diskette mounten</h3>
         <p>Um die Zip-Diskette zu mounten, folgenden Eintrag in <strong><em>/etc/fstab</em></strong> hinzugef&uuml;gen.</p>
+        <br>
         <p class="code-topic">Eintrag in /etc/fstab</p>
         <pre><code>/dev/sdc4 /media/zipdrive vfat noauto,rw,user 0 0</code></pre><br>
         <p>Dies erm&ouml;glicht es, die Zip-Diskette als Benutzer zu mounten. Das Zielverzeichnis <strong><em>/media/zipdrive</em></strong> muss erstellt werden.
@@ -126,6 +127,7 @@ Jan 01 00:00:00 hostname kernel: sd 8:0:6:0: [sdc] Attached SCSI removable disk<
     <section>
         <h3>Bequemes Nutzen des Zip-Laufwerks</h3>
         <p>Skript um das Modul f&uuml;r das Zip-Laufwerk zu laden / entladen. Als <strong><em>/usr/local/bin/zipdrive.sh</em></strong> ablegen.</p>
+        <br>
         <p class="code-topic">/usr/local/bin/zipdrive.sh</p>
         <pre><code>#!/bin/env bash
 
@@ -225,6 +227,7 @@ main "$@" || exit 1</code></pre><br>
     <section>
         <h3>Interessante Befehle</h3>
         <h4>Die Zip-Diskette auswerfen, wie eine CD-ROM in den guten alten Tagen</h4>
+        <br>
         <p class="code-topic">ZIP Disk auswerfen</p>
         <pre><code>$ eject /dev/sdc
         </code></pre><br>
@@ -246,6 +249,7 @@ main "$@" || exit 1</code></pre><br>
         <br>
         <h4>Eine Zip-Diskette als FAT16 neu partitionieren und formatieren (funktioniert f&uuml;r 100 und 250 MB Disketten)</h4>
         <p>VORSICHT! DAS ZERST&Ouml;RT ALLE DATEN, DEVICE NAMEN PR&Uuml;FEN!</p>
+        <br>
         <p class="code-topic">ZIP Disk (neu) formatieren</p>
         <pre><code># destroy partition table (and wipe vfat signature at beginning of partition4)
 sudo dd if=/dev/zero of=/dev/sdc bs=1M count=1

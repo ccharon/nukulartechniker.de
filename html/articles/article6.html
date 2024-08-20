@@ -12,13 +12,13 @@
         <h1>Greaseweazle</h1>
         <p>
             Ein Greaseweazle ist ein Open-Source Hardware- und Softwareprojekt zum Lesen und Schreiben von Disketten.
-            Es wird über USB angeschlossen und kann verschiedene Diskettenformate verarbeiten.
+            Es wird über USB angeschlossen und kann verschiedene Diskettenformate verarbeiten.<br><br>
             Die Software ist in Python geschrieben und kann auf verschiedenen Betriebssystemen verwendet werden.
-            <br>
+            <br><br>
         </p>
     </section>
     <section>
-        <h2>Installation unter Linux in einer Python VENV</h2>
+        <h2>Installation in eigener VENV</h2>
         <br>
         <p class="code-topic">Software installieren</p>
         <pre><code>$ python -m venv $HOME/greaseweazle/venv
@@ -52,7 +52,7 @@ bash --init-file &lt;(echo "source $HOME/greaseweazle/venv/bin/activate ; gw res
         <br>
     </section>
     <section>
-        <h2>Testen ob das Greaseweazle erkannt wird</h2>
+        <h2>Greaseweazle testen</h2>
         <p>Gerät über USB anschliessen. Es sollte als <strong><em>/dev/ttyACM0</em></strong> auftauchen.</p>
         <br>
         <p class="code-topic">gw info mit Ausgabe</p>
@@ -69,7 +69,7 @@ USB:      Full Speed (12 Mbit/s)
         <br>
     </section>
     <section>
-        <h2>Verwendung des Greaseweazle</h2>
+        <h2>Greaseweazle verwenden</h2>
         <h3>Eine Diskette lesen</h3>
         <p>Um mehr Informationen über mögliche Leseformate und Ausgaben zu erhalten, verwendet man <strong><em>gw read --help</em></strong></p>
         <br>
