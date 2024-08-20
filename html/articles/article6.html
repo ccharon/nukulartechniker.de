@@ -19,6 +19,7 @@
     </section>
     <section>
         <h2>Installation unter Linux in einer Python VENV</h2>
+        <br>
         <p class="code-topic">Software installieren</p>
         <pre><code>$ python -m venv $HOME/greaseweazle/venv
 $ source $HOME/greaseweazle/venv/bin/activate
@@ -28,6 +29,7 @@ $ pip install git+https://github.com/keirf/greaseweazle@latest
     </section>
     <section>
         <p>Um das nun installierte <strong><em>gw</em></strong> zu verwenden, muss die Umgebung aktiv sein. Um sie später zu aktivieren.</p>
+        <br>
         <p class="code-topic">Venv aktivieren</p>
         <pre><code>$ source $HOME/greaseweazle/bin/activate
         </code></pre>
@@ -38,6 +40,7 @@ $ pip install git+https://github.com/keirf/greaseweazle@latest
             Man kann ein Skript verwenden, speichern als: <strong><em>$HOME/bin/weazle.sh</em></strong>.
             Das öffnet eine neue Shell mit der aktiven Umgebung in einem Verzeichnis zum Speichern von Images.
         </p>
+        <br>
         <p class="code-topic">$HOME/bin/weazle.sh</p>
         <pre><code>#!/bin/env bash
 
@@ -51,6 +54,7 @@ bash --init-file &lt;(echo "source $HOME/greaseweazle/venv/bin/activate ; gw res
     <section>
         <h2>Testen ob das Greaseweazle erkannt wird</h2>
         <p>Gerät über USB anschliessen. Es sollte als <strong><em>/dev/ttyACM0</em></strong> auftauchen.</p>
+        <br>
         <p class="code-topic">gw info mit Ausgabe</p>
         <pre><code>$ gw info
 Host Tools: 1.16
