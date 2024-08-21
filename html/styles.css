@@ -365,9 +365,5 @@ code {
     .zipdrive-table {
         grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     }
-
-    .zipdrive-table img {
-        max-width: 50%;
-    }
 }
 /* Speziell fuer Artikel 3, Zip Drive - Ende */
