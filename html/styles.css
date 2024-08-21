@@ -134,6 +134,11 @@ section#main {
     overflow-x: hidden;
 }
 
+section#main img {
+    width: 100%;
+    height: auto;
+}
+
 aside {
     background: rgba(255, 255, 255, 0.9); /* White background with 90% opacity */
     padding: 20px;
