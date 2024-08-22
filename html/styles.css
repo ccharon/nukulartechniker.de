@@ -181,15 +181,16 @@ aside li {
 
 aside a:link,
 aside a:visited {
-    color: #4682b4; /* SteelBlue text color */
-    background-color: #b0c4de; /* LightSteelBlue */
+    color: black;
+    background-color: lightsteelblue;
     text-decoration: none;
+    text-align: left;
 }
 
 aside a {
     display: block;
     padding: 15px; /* Larger padding for a more button-like appearance */
-    background-color: #b0c4de; /* LightSteelBlue */
+    background-color: lightsteelblue;
     color: #4682b4;
     border-radius: 8px;
     text-align: center;
@@ -268,7 +269,7 @@ footer a:visited {
         display: block;
         background: none;
         border: none;
-        color: #ffffff;
+        color: white;
         font-size: 1.5rem;
         cursor: pointer;
         margin: 0 auto;
@@ -282,7 +283,7 @@ footer a:visited {
 
 /* zusammen mit pre ergibt das eine nette box fuer code beispiele */
 .code-topic {
-    background-color: #b0c4de; /* LightSteelBlue */
+    background-color: lightsteelblue;
     padding: 10px;
     border-bottom: none;
     font-weight: bold;
@@ -363,7 +364,7 @@ code {
 
 .zipdrive-table th {
     background-color: #4682b4;
-    color: #ffffff;
+    color: white;
 }
 
 .zipdrive-table img {

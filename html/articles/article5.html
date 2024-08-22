@@ -205,13 +205,14 @@ $ echo "UUID=`blkid -s UUID -o value /dev/nvme0n1p1`   /boot/efi  vfat  umask=00
 $ echo "UUID=`blkid -s UUID -o value /dev/system/swap`   none  swap  sw 0  0" &gt;&gt; /etc/fstab
             </code></pre><br>
         <p>Jetzt die fstab mit einem Editor öffnen und die alten Werte für root, efi, swap und evtl. boot rauswerfen.</p>
-        <h3>Initramfs an die neue Config anpassen</h3>
+        <br>
+        <p class="code-topic">Initramfs an die neue Config anpassen</p>
         <pre><code>$ apt-get install --reinstall cryptsetup-initramfs
 
 $ echo "RESUME=/dev/ares/swap" &gt; /etc/initramfs-tools/conf.d/resume
 $ echo "UMASK=0077" &gt;&gt; /etc/initramfs-tools/initramfs.conf
             </code></pre><br>
-        <h3>Grub.cfg auf der EFI Partition ersetzen</h3>
+        <p class="code-topic">Grub.cfg auf der EFI Partition ersetzen</p>
         <pre><code># grub.cfg anpassen damit verschlüsselte Partitionen beachtet werden
 $ echo "GRUB_ENABLE_CRYPTODISK=y" &gt;&gt; /etc/default/grub
 
@@ -223,14 +224,14 @@ $ grub-mkconfig -o /boot/grub/grub.cfg
     </section>
     <section>
         <h2>Nach dem Neustart noch Snapper konfigurieren</h2>
-        <h3>/etc/fstab Eintrag für Subvolume @snapshots</h3>
+        <p class="code-topic">/etc/fstab Eintrag für Subvolume @snapshots</p>
         <pre><code>$ echo "UUID=`blkid -s UUID -o value /dev/system/root`   /.snapshots  btrfs   subvol=@snapshots,defaults,compress=zstd,noatime,autodefrag  0  0" &gt;&gt; /etc/fstab
             </code></pre><br>
-        <h3>Snapper installieren und Config anlegen</h3>
+        <p class="code-topic">Snapper installieren und Config anlegen</p>
         <pre><code>$ apt-get install snapper
 $ snapper -c root create-config /
             </code></pre><br>
-        <p>Das Verzeichnis, das Snapper angelegt hat, löschen und neu anlegen</p>
+        <p class="code-topic">Das Verzeichnis, das Snapper angelegt hat, löschen und neu anlegen</p>
         <pre><code>$ rm -rf /.snapshots
 $ mkdir /.snapshots
 $ rm -rf /.snapshots
@@ -239,7 +240,7 @@ $ mount /.snapshots
     </section>
     <section>
         <h1>Datenfestplatten</h1>
-        <h2>Festplatten partitionieren</h2>
+        <p class="code-topic">Festplatten partitionieren</p>
         <pre><code>$ parted --script /dev/sda "mklabel gpt"
 $ parted --script /dev/sda "mkpart primary 1 100%"
 
@@ -249,33 +250,36 @@ $ parted --script /dev/sdb "mkpart primary 1 100%"
     </section>
     <section>
         <h2>Cryptsetup</h2>
-        <h3>Partition verschlüsseln</h3>
+        <p class="code-topic">Partition verschlüsseln</p>
         <pre><code>$ cryptsetup -y -v luksFormat /dev/sda1 --hash sha512 --cipher aes-xts-plain64 --key-size 512 --iter-time 10000
 $ cryptsetup -y -v luksFormat /dev/sdb1 --hash sha512 --cipher aes-xts-plain64 --key-size 512 --iter-time 10000
             </code></pre><br>
-        <h3>Keyfile generieren</h3>
+        <p class="code-topic">Keyfile generieren</p>
         <pre><code>mkdir /etc/luks-keys/; dd if=/dev/urandom of=/etc/luks-keys/phobos bs=64 count=1
 mkdir /etc/luks-keys/; dd if=/dev/urandom of=/etc/luks-keys/deimos bs=64 count=1
 chmod 0400 /etc/luks-keys/*
             </code></pre><br>
-        <h3>Key zu verschlüsseltem Volume hinzufügen</h3>
+        <p class="code-topic">Key zu verschlüsseltem Volume hinzufügen</p>
         <pre><code>cryptsetup luksAddKey /dev/sda1 --key-size 512 --iter-time 2000 --hash sha512 /etc/luks-keys/phobos
 cryptsetup luksAddKey /dev/sdb1 --key-size 512 --iter-time 2000 --hash sha512 /etc/luks-keys/deimos
             </code></pre><br>
-        <h3>Crypttab anpassen</h3>
+        <p class="code-topic">Crypttab anpassen</p>
         <pre><code>echo "phobos UUID=\"`blkid -s UUID -o value /dev/sda1`\" /etc/luks-keys/phobos luks,key-slot=1" &gt;&gt; /etc/crypttab
 echo "deimos UUID=\"`blkid -s UUID -o value /dev/sdb1`\" /etc/luks-keys/deimos luks,key-slot=1" &gt;&gt; /etc/crypttab
             </code></pre><br>
-        <h3>Cryptdisks starten</h3>
+        <p class="code-topic">Cryptdisks starten</p>
         <pre><code>cryptdisk_start phobos deimos
             </code></pre><br>
     </section>
     <section>
         <h2>Dateisysteme erzeugen</h2>
+        <p class="code-topic">Btrfs Dateisystem erzeugen</p>
         <pre><code>mkfs.btrfs -f -L vault -m raid1 -d raid1 /dev/mapper/phobos /dev/mapper/phobos
             </code></pre><br>
         <h3>Subvolume Layout aufbauen</h3>
         <p>Um sicherzustellen, dass man an die Snapshots rankommt, wenn das eigentliche Volume Probleme hat, kommt das Snapshot Subvolume @snapshots auf das gleiche Level wie das eigentliche Daten Subvolume (@). Später wird dann @snapshots unter ./snapshots ins Datenvolume gemounted.</p>
+        <br>
+        <p class="code-topic">Subvolume Layout</p>
         <pre><code>subvolid=5
 |
 ├── @
@@ -293,6 +297,8 @@ echo "deimos UUID=\"`blkid -s UUID -o value /dev/sdb1`\" /etc/luks-keys/deimos l
 └── @...
 </code></pre><br>
 <p>also los: Ein btrfs raid1 kann man mounten indem man einfach ein device des raids mounted, in der fstab wird später auf nummer sicher gegangen.</p>
+        <br>
+        <p class="code-topic">Mounten</p>
         <pre><code>mount /dev/mapper/phobos /mnt
             </code></pre><br>
 # zwischendurch kann man einfach mal schauen, ob das Anlegen des Dateisystems soweit gut war. Es müsste Data, Metadata und System RAID1 dabei sein
@@ -302,7 +308,7 @@ btrfs subvolume create /mnt/@
 btrfs subvolume create /mnt/@snapshots
 umount /mnt
             </code></pre><br>
-        <h3>Mountpunkte in der richtigen Reihenfolge anlegen und Snapper konfigurieren</h3>
+        <p class="code-topic">Mountpunkte anlegen + Snapper konfigurieren</p>
         <pre><code>
 # Mountpunkt anlegen
 mkdir /vault
@@ -337,19 +343,22 @@ usermod -a -G users username
     </section>
     <section>
         <h2>Regelm&auml;&szlig;iges Dateisystem aufr&auml;umen (scrub)</h2>
-        <p>apt-get install btrfsmaintenance</p>
+        <p class="code-topic">BTRFS Maintenance installieren</p>
+        <pre><code>$ apt-get install btrfsmaintenance
+        </code></pre><br>
         <p>dann die /etc/default/btrfsmaintenance anpassen https://github.com/kdave/btrfsmaintenance/blob/master/README.md</p>
+        <br>
     </section>
     <section>
         <h2>Was kann man noch machen</h2>
-        <p>snapper-gui installieren</p>
+        <p class="code-topic">snapper-gui installieren</p>
         <pre><code>
 apt-get install snapper-gui
             </code></pre><br>
     </section>
     <section>
         <h2>Backups mit snap-sync</h2>
-        <p>Einen Backup Datenträger mit btrfs formatieren und mounten</p>
+        <p class="code-topic">Backup Datenträger einrichten</p>
         <pre><code>
 # partitionieren
 $ parted --script /dev/sdc "mklabel gpt"
@@ -366,21 +375,23 @@ $ mkfs.btrfs -f -L backup /dev/mapper/backup
 
 # mounten
 $ mount /dev/mapper/backup /mnt
-</code></pre><br>
-<p>Snapsync herunterladen https://github.com/wesbarnett/snap-sync/releases entpacken und als root make install ausführen Dann kann man die btrfs Dateisysteme mit incrementellen Snapshots sichern</p>
-
-<pre><code>
-# das Zieldateisystem muss irgendwo gemoutet sein
+        </code></pre><br>
+        <p>Snapsync herunterladen https://github.com/wesbarnett/snap-sync/releases entpacken und als root make install ausführen
+            Dann kann man die btrfs Dateisysteme mit inkrementellen Snapshots sichern
+        </p>
+        <br>
+        <p class="code-topic">Snapsync einrichten</p>
+        <pre><code># das Zieldateisystem muss irgendwo gemoutet sein
 # -c name der snapper config
 # -u uuid des backup ziels, wird mit blkid ermittelt, auf device achten!
-snap-sync -c root -u `blkid -s UUID -o value /dev/mapper/backup`
+$ snap-sync -c root -u `blkid -s UUID -o value /dev/mapper/backup`
 
 # wenn fertig
-umount /mnt
-cryptsetup luksClose /dev/mapper/backup
-</code></pre><br>
-        </section>
-<h2>quellen aus denen ich das hab</h2>
+$ umount /mnt
+$ cryptsetup luksClose /dev/mapper/backup
+        </code></pre><br>
+    </section>
+<h2>Quellen aus denen ich das hab</h2>
 <p>https://computingforgeeks.com/working-with-btrfs-filesystem-in-linux/</p>
 <p>https://blog.bmarwell.de/zwei-festplatten-in-einem-btrfs-raid1-zusammenfuehren/</p>
 <p>https://wiki.archlinux.org/index.php/Snapper</p>
