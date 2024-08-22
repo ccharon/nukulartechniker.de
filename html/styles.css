@@ -19,6 +19,21 @@ html, body {
     height: 100%;
 }
 
+.nukular-quote {
+    border-left: 4px solid #ccc;
+    padding-left: 10px;
+    margin: 20px 0;
+    font-style: italic;
+}
+
+.nukular-quote cite {
+    display: block;
+    font-size: 0.8em;
+    color: #666;
+    margin-top: 5px;
+    text-align: right;
+}
+
 /* Body styling */
 body {
     font-family: 'Roboto Mono', monospace;
