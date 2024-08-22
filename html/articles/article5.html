@@ -92,8 +92,9 @@ $ vgchange -a n &lt;nameDerVolumeGroup&gt;
     </section>
     <section>
         <h2>Festplatte neu partitionieren</h2>
-        <p>ACHTUNG: hier gehen alle Daten verloren, also im Zweifelsfall nochmal die eben erstellten tar Dateien checken</p>
-        <p>(500GB SSD die ein bisschen freien Platz beh&auml;lt)</p>
+        <p>
+            ACHTUNG: hier gehen alle Daten verloren, also im Zweifelsfall nochmal die eben erstellten tar Dateien checken
+            (500GB SSD die ein bisschen freien Platz beh&auml;lt)</p>
         <br>
         <p class="code-topic">Partitonieren</p>
         <pre><code>parted --script /dev/nvme0n1 "mklabel gpt"
@@ -215,8 +216,6 @@ $ echo "UUID=`blkid -s UUID -o value /dev/system/swap`   none  swap  sw 0  0" &g
 $ echo "RESUME=/dev/ares/swap" &gt; /etc/initramfs-tools/conf.d/resume
 $ echo "UMASK=0077" &gt;&gt; /etc/initramfs-tools/initramfs.conf
             </code></pre><br>
-        <h3>Grub.cfg auf der EFI Partition ersetzen</h3>
-        <pre><code># grub.cfg anpassen damit verschl&uuml;sselte Partitionen beachtet werden
         <p class="code-topic">Grub.cfg auf der EFI Partition ersetzen</p>
         <pre><code># grub.cfg anpassen damit verschlüsselte Partitionen beachtet werden
 $ echo "GRUB_ENABLE_CRYPTODISK=y" &gt;&gt; /etc/default/grub
@@ -306,16 +305,19 @@ echo "deimos UUID=\"`blkid -s UUID -o value /dev/sdb1`\" /etc/luks-keys/deimos l
         <p class="code-topic">Mounten</p>
         <pre><code>mount /dev/mapper/phobos /mnt
             </code></pre><br>
-# zwischendurch kann man einfach mal schauen, ob das Anlegen des Dateisystems soweit gut war. Es m&uuml;sste Data, Metadata und System RAID1 dabei sein
-btrfs fi usage /vault
+        <p>Zwischendurch kann man einfach mal schauen, ob das Anlegen des Dateisystems soweit gut war.
+            Es m&uuml;sste Data, Metadata und System RAID1 dabei sein
+        </p>
+        <br>
+        <p class="code-topic">Subvolumes anlegen</p>
+        <pre><code>btrfs fi usage /vault
 
 btrfs subvolume create /mnt/@
 btrfs subvolume create /mnt/@snapshots
 umount /mnt
             </code></pre><br>
         <p class="code-topic">Mountpunkte anlegen + Snapper konfigurieren</p>
-        <pre><code>
-# Mountpunkt anlegen
+        <pre><code># Mountpunkt anlegen
 mkdir /vault
 
 # /etc/fstab Eintrag f&uuml;r Subvolume @ (die eigentlichen Daten)
@@ -357,16 +359,13 @@ usermod -a -G users username
     <section>
         <h2>Was kann man noch machen</h2>
         <p class="code-topic">snapper-gui installieren</p>
-        <pre><code>
-apt-get install snapper-gui
+        <pre><code>$ apt-get install snapper-gui
             </code></pre><br>
     </section>
     <section>
         <h2>Backups mit snap-sync</h2>
-        <p>Einen Backup Datentr&auml;ger mit btrfs formatieren und mounten</p>
         <p class="code-topic">Backup Datenträger einrichten</p>
-        <pre><code>
-# partitionieren
+        <pre><code># partitionieren
 $ parted --script /dev/sdc "mklabel gpt"
 $ parted --script /dev/sdc "mkpart primary 1 100%"
 
@@ -382,11 +381,6 @@ $ mkfs.btrfs -f -L backup /dev/mapper/backup
 # mounten
 $ mount /dev/mapper/backup /mnt
 </code></pre><br>
-<p>Snapsync herunterladen https://github.com/wesbarnett/snap-sync/releases entpacken und als root make install ausf&uuml;hren Dann kann man die btrfs Dateisysteme mit incrementellen Snapshots sichern</p>
-
-<pre><code>
-# das Zieldateisystem muss irgendwo gemoutet sein
-        </code></pre><br>
         <p>Snapsync herunterladen https://github.com/wesbarnett/snap-sync/releases entpacken und als root make install ausführen
             Dann kann man die btrfs Dateisysteme mit inkrementellen Snapshots sichern
         </p>
