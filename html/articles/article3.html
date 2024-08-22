@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iomega Zip Laufwerk</title>
+    <title>Iomega Zip 250</title>
 </head>
 <body>
 <main>
     <section>
-        <p>2024-08-19</p>
-        <h1>Iomega Zip Laufwerk</h1>
+        <div class="article-date">
+            <p>2024-08-19</p>
+        </div>
+        <h1>Iomega Zip 250</h1>
     </section>
 
     <section>
@@ -41,17 +43,17 @@
             <tr>
                 <td><img src="images/article3/pcie-parallel-startech1.webp" alt="PCIE Parallelport-Karte"><br><img src="images/article3/pcie-parallel-startech2.webp" alt="PCIE Parallelport-Karte"></td>
                 <td>
-                    Parallelport PCIE Karte<br><br>Ich habe eine "Startech 2S1P Native PCI Express Parallel Serial Combo Card mit 16550 UART" benutzt.
+                    Parallelport PCIE Karte<br><br>Startech 2S1P Native PCI Express Parallel Serial Combo Card mit 16550 UART<br><br>
                     Es ist wichtig, die richtige Karte zu nutzen, sonst hat man nur SPP-Unterst&uuml;tzung oder gar keine Linux-Unterst&uuml;tzung.
-                    Nach dem Lesen einiger CNC-Foren hab ich herausgefunden, dass der MOSCHIP MCS9901 eine gute Wahl ist um EPP-Unterst&uuml;tzung zu erhalten.
+                    Der Chipsatz MOSCHIP MCS9901 ist eine gute Wahl ist um EPP-Unterst&uuml;tzung zu erhalten.
                 </td>
             </tr>
         </table>
         <p>
             Die Karte in den PC einbauen und das Parallelport-Kabel mit dem Zip-Laufwerk verbinden. Ich habe einen freien PCIe x16-Steckplatz f&uuml;r die Karte genutzt. Netzteil an das Zip-Laufwerk anschliessen.
             Die Karte wird vom Kernel erkannt und der Parallelport ist verf&uuml;gbar. <br><br>
-            Mit dieser Karte mit MCS9901-Chipsatz konnte ich den EPP-Modus des Parallelports verwenden. Das macht einen riesen Unterschied in der Geschwindigkeit.
-            Im SPP-Modus meldet hdparm -tT etwa 100kB/sec, im EPP-Modus meldet es etwa 330kB/sec!
+            Mit dem MCS9901 Chipsatz funktioniert der EPP-Modus des ZIP Laufwerks.
+            Im SPP-Modus meldet hdparm -tT etwa 100kB/sec, im EPP-Modus sind es 330kB/sec!
             Eine andere Karte mit WCH382L-Chipsatz konnte nur im SPP-Modus verwendet werden obwohl die Karte als EPP-f&auml;hig beworben wurde.
         </p>
         <br>

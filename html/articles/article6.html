@@ -8,17 +8,20 @@
 <body>
 <main>
     <section>
-        <p>2024-08-19</p>
+        <div class="article-date">
+            <p>2024-08-19</p>
+        </div>
         <h1>Greaseweazle</h1>
         <p>
             Ein Greaseweazle ist ein Open-Source Hardware- und Softwareprojekt zum Lesen und Schreiben von Disketten.
-            Es wird über USB angeschlossen und kann verschiedene Diskettenformate verarbeiten.<br><br>
+            Es wird &uuml;ber USB angeschlossen und kann verschiedene Diskettenformate verarbeiten.<br><br>
             Die Software ist in Python geschrieben und kann auf verschiedenen Betriebssystemen verwendet werden.
             <br><br>
         </p>
     </section>
     <section>
-        <h2>Installation in eigener VENV</h2>
+        <h2>Installation</h2>
+        <p>Das gw Paket wird in eine virtuelle Python Umgebung installiert.</p>
         <br>
         <p class="code-topic">Software installieren</p>
         <pre><code>$ python -m venv $HOME/greaseweazle/venv
@@ -29,7 +32,7 @@ $ pip install git+https://github.com/keirf/greaseweazle@latest
     </section>
     <section>
         <p>Um das installierte <strong><em>gw</em></strong> Paket zu verwenden, muss immer die passende virtuelle Umgebung
-            aktiv sein. Hier der Befehl um sp&uuml;ter wieder in die Umgebung zu wechseln.</p>
+            aktiv sein. Hier der Befehl um sp&auml;ter wieder in die Umgebung zu wechseln.</p>
         <br>
         <p class="code-topic">Venv aktivieren</p>
         <pre><code>$ source $HOME/greaseweazle/bin/activate
@@ -52,8 +55,8 @@ bash --init-file &lt;(echo "source $HOME/greaseweazle/venv/bin/activate ; gw res
         <br>
     </section>
     <section>
-        <h2>Greaseweazle testen</h2>
-        <p>Gerät über USB anschliessen. Es sollte als <strong><em>/dev/ttyACM0</em></strong> auftauchen.</p>
+        <h2>Test</h2>
+        <p>Greaseweazle &uuml;ber USB anschliessen. Es sollte als <strong><em>/dev/ttyACM0</em></strong> auftauchen.</p>
         <br>
         <p class="code-topic">gw info mit Ausgabe</p>
         <pre><code>$ gw info
@@ -71,7 +74,7 @@ USB:      Full Speed (12 Mbit/s)
     <section>
         <h2>Greaseweazle verwenden</h2>
         <h3>Eine Diskette lesen</h3>
-        <p>Um mehr Informationen über m&ouml;gliche Leseformate und Ausgaben zu erhalten, verwendet man <strong><em>gw read --help</em></strong></p>
+        <p>Um mehr Informationen &uuml;ber m&ouml;gliche Leseformate und Ausgaben zu erhalten, verwendet man <strong><em>gw read --help</em></strong></p>
         <br>
         <p class="code-topic">Lesen einer MS-DOS 1,44MB HD 3,5" Diskette</p>
         <pre><code>$ gw read --format ibm.1440 a.scp
@@ -92,7 +95,7 @@ T2.0: IBM MFM (18/18 sectors) from Raw Flux (151418 flux in 399.75ms)
         <br>
     </section>
     <section>
-        <h3>Zusätzliches</h3>
+        <h3>Zus&auml;tzliches</h3>
         <p>Details zur zus&auml;tzlichen Nutzung...</p>
         <br>
     </section>

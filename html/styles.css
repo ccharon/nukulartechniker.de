@@ -244,6 +244,17 @@ footer a:visited {
     text-decoration: none; /* Remove underline */
 }
 
+.article-date {
+    font-size: 1.5em; /* Increase font size */
+    color: #333; /* Dark text color */
+    font-weight: bold; /* Make text bold */
+    padding: 10px; /* Add padding */
+    background-color: #b0c4de; /* LightSteelBlue background color */
+    border-radius: 5px; /* Add rounded corners */
+    text-align: center; /* Center align text */
+    border: 1px solid #ccc; /* Add border to match other elements */
+}
+
 /* Hide toggle button by default */
 #toggle-aside {
     display: none;
