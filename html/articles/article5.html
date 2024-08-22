@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Festplatte verschlüsseln</title>
+    <title>Festplatte verschl&uuml;sseln</title>
 </head>
 <body>
 
 <main>
     <section>
         <p>2024-08-19</p>
-        <h1>Festplatte verschlüsseln</h1>
-        <p>Es wird davon ausgegangen, dass es schon irgendwas installiertes gibt, das nicht verschlüsselt ist. Ziel ist es, dieses Layout anzulegen.</p>
+        <h1>Festplatte verschl&uuml;sseln</h1>
+        <p>Es wird davon ausgegangen, dass es schon irgendwas installiertes gibt, das nicht verschl&uuml;sselt ist. Ziel ist es, dieses Layout anzulegen.</p>
         <br>
         <p class="code-topic">Ziel Layout</p>
         <pre><code>GPT
@@ -45,14 +45,14 @@
 # wenn es keine boot Partition gibt, einfach auslassen.
 
 # evtl. ist es hilfreich zu wissen, wie man LVM Volumes manuell einbindet:
-# falls nötig
+# falls n&ouml;tig
 $ apt-get install lvm2
 $ vgscan
 
 # dann die Volume Group(s) aktivieren
 $ vgchange -a y &lt;nameDerVolumeGroup&gt;
 
-# jetzt sind die Volumes unter /dev/mapper/ verfügbar
+# jetzt sind die Volumes unter /dev/mapper/ verf&uuml;gbar
 
 # alles sichern
 $ cd /old/efi
@@ -108,19 +108,19 @@ $ parted --script /dev/nvme0n1 "mkpart primary ext4 1537MiB 394753MiB"
             </code></pre><br>
     </section>
     <section>
-        <h2>Verschlüsselung und formatieren</h2>
+        <h2>Verschl&uuml;sselung und formatieren</h2>
         <br>
-        <p class="code-topic">Verschlüsselung und formatieren</p>
+        <p class="code-topic">Verschl&uuml;sselung und formatieren</p>
         <pre><code># erst mal die EFI Partition formatieren
 $ mkfs.fat -F32 -n EFI /dev/nvme0n1p1
 
 # boot Partition formatieren
 $ mkfs.ext4 -L boot -T small /dev/nvme0n1p2
 
-# mit Luks die LVM Partition verschlüsseln
+# mit Luks die LVM Partition verschl&uuml;sseln
 $ cryptsetup -y -v luksFormat /dev/nvme0n1p3 --hash sha512 --cipher aes-xts-plain64 --key-size 512 --iter-time 10000
 
-# verschlüsselte Partition zum formatieren öffnen (die findet man dann unter /dev/mapper/luks-&lt;uuid der Partition&gt;)
+# verschl&uuml;sselte Partition zum formatieren &ouml;ffnen (die findet man dann unter /dev/mapper/luks-&lt;uuid der Partition&gt;)
 $ cryptsetup luksOpen /dev/nvme0n1p3 luks-`blkid -s UUID -o value /dev/nvme0n1p3`
 
 # LVM Setup
@@ -141,7 +141,7 @@ $ umount /mnt
 # swap formatieren
 $ mkswap /dev/system/swap
 
-# neue Dateisysteme an temporäre Stelle mounten
+# neue Dateisysteme an tempor&auml;re Stelle mounten
 $ mkdir -p /new/root
 
 $ mount /dev/system/root /new/root -t btrfs -o subvol=@,compress=zstd
@@ -182,14 +182,14 @@ $ source /etc/profile
             </code></pre><br>
     </section>
     <section>
-        <h2>Wieder bootfähig machen</h2>
+        <h2>Wieder bootf&auml;hig machen</h2>
         <h3>Crypttab anpassen</h3>
         <br>
         <p class="code-topic">Crypttab aktualisieren</p>
         <pre><code>echo "luks-`blkid -s UUID -o value /dev/nvme0n1p3` UUID=\"`blkid -s UUID -o value /dev/nvme0n1p3`\" none luks,discard" &gt;&gt; /etc/crypttab
             </code></pre><br>
         <h3>Fstab anpassen</h3>
-        <p>Neue Einträge für root, efi und swap hinzufügen</p>
+        <p>Neue Eintr&auml;ge f&uuml;r root, efi und swap hinzuf&uuml;gen</p>
         <br>
         <p class="code-topic">/etc/fstab anpassen</p>
         <pre><code># root
@@ -204,7 +204,7 @@ $ echo "UUID=`blkid -s UUID -o value /dev/nvme0n1p1`   /boot/efi  vfat  umask=00
 # swap
 $ echo "UUID=`blkid -s UUID -o value /dev/system/swap`   none  swap  sw 0  0" &gt;&gt; /etc/fstab
             </code></pre><br>
-        <p>Jetzt die fstab mit einem Editor öffnen und die alten Werte für root, efi, swap und evtl. boot rauswerfen.</p>
+        <p>Jetzt die fstab mit einem Editor &ouml;ffnen und die alten Werte f&uuml;r root, efi, swap und evtl. boot rauswerfen.</p>
         <h3>Initramfs an die neue Config anpassen</h3>
         <pre><code>$ apt-get install --reinstall cryptsetup-initramfs
 
@@ -212,7 +212,7 @@ $ echo "RESUME=/dev/ares/swap" &gt; /etc/initramfs-tools/conf.d/resume
 $ echo "UMASK=0077" &gt;&gt; /etc/initramfs-tools/initramfs.conf
             </code></pre><br>
         <h3>Grub.cfg auf der EFI Partition ersetzen</h3>
-        <pre><code># grub.cfg anpassen damit verschlüsselte Partitionen beachtet werden
+        <pre><code># grub.cfg anpassen damit verschl&uuml;sselte Partitionen beachtet werden
 $ echo "GRUB_ENABLE_CRYPTODISK=y" &gt;&gt; /etc/default/grub
 
 # grub installieren
@@ -223,14 +223,14 @@ $ grub-mkconfig -o /boot/grub/grub.cfg
     </section>
     <section>
         <h2>Nach dem Neustart noch Snapper konfigurieren</h2>
-        <h3>/etc/fstab Eintrag für Subvolume @snapshots</h3>
+        <h3>/etc/fstab Eintrag f&uuml;r Subvolume @snapshots</h3>
         <pre><code>$ echo "UUID=`blkid -s UUID -o value /dev/system/root`   /.snapshots  btrfs   subvol=@snapshots,defaults,compress=zstd,noatime,autodefrag  0  0" &gt;&gt; /etc/fstab
             </code></pre><br>
         <h3>Snapper installieren und Config anlegen</h3>
         <pre><code>$ apt-get install snapper
 $ snapper -c root create-config /
             </code></pre><br>
-        <p>Das Verzeichnis, das Snapper angelegt hat, löschen und neu anlegen</p>
+        <p>Das Verzeichnis, das Snapper angelegt hat, l&ouml;schen und neu anlegen</p>
         <pre><code>$ rm -rf /.snapshots
 $ mkdir /.snapshots
 $ rm -rf /.snapshots
@@ -249,7 +249,7 @@ $ parted --script /dev/sdb "mkpart primary 1 100%"
     </section>
     <section>
         <h2>Cryptsetup</h2>
-        <h3>Partition verschlüsseln</h3>
+        <h3>Partition verschl&uuml;sseln</h3>
         <pre><code>$ cryptsetup -y -v luksFormat /dev/sda1 --hash sha512 --cipher aes-xts-plain64 --key-size 512 --iter-time 10000
 $ cryptsetup -y -v luksFormat /dev/sdb1 --hash sha512 --cipher aes-xts-plain64 --key-size 512 --iter-time 10000
             </code></pre><br>
@@ -258,7 +258,7 @@ $ cryptsetup -y -v luksFormat /dev/sdb1 --hash sha512 --cipher aes-xts-plain64 -
 mkdir /etc/luks-keys/; dd if=/dev/urandom of=/etc/luks-keys/deimos bs=64 count=1
 chmod 0400 /etc/luks-keys/*
             </code></pre><br>
-        <h3>Key zu verschlüsseltem Volume hinzufügen</h3>
+        <h3>Key zu verschl&uuml;sseltem Volume hinzuf&uuml;gen</h3>
         <pre><code>cryptsetup luksAddKey /dev/sda1 --key-size 512 --iter-time 2000 --hash sha512 /etc/luks-keys/phobos
 cryptsetup luksAddKey /dev/sdb1 --key-size 512 --iter-time 2000 --hash sha512 /etc/luks-keys/deimos
             </code></pre><br>
@@ -275,7 +275,7 @@ echo "deimos UUID=\"`blkid -s UUID -o value /dev/sdb1`\" /etc/luks-keys/deimos l
         <pre><code>mkfs.btrfs -f -L vault -m raid1 -d raid1 /dev/mapper/phobos /dev/mapper/phobos
             </code></pre><br>
         <h3>Subvolume Layout aufbauen</h3>
-        <p>Um sicherzustellen, dass man an die Snapshots rankommt, wenn das eigentliche Volume Probleme hat, kommt das Snapshot Subvolume @snapshots auf das gleiche Level wie das eigentliche Daten Subvolume (@). Später wird dann @snapshots unter ./snapshots ins Datenvolume gemounted.</p>
+        <p>Um sicherzustellen, dass man an die Snapshots rankommt, wenn das eigentliche Volume Probleme hat, kommt das Snapshot Subvolume @snapshots auf das gleiche Level wie das eigentliche Daten Subvolume (@). Sp&auml;ter wird dann @snapshots unter ./snapshots ins Datenvolume gemounted.</p>
         <pre><code>subvolid=5
 |
 ├── @
@@ -292,10 +292,10 @@ echo "deimos UUID=\"`blkid -s UUID -o value /dev/sdb1`\" /etc/luks-keys/deimos l
 |
 └── @...
 </code></pre><br>
-<p>also los: Ein btrfs raid1 kann man mounten indem man einfach ein device des raids mounted, in der fstab wird später auf nummer sicher gegangen.</p>
+<p>also los: Ein btrfs raid1 kann man mounten indem man einfach ein device des raids mounted, in der fstab wird sp&auml;ter auf nummer sicher gegangen.</p>
         <pre><code>mount /dev/mapper/phobos /mnt
             </code></pre><br>
-# zwischendurch kann man einfach mal schauen, ob das Anlegen des Dateisystems soweit gut war. Es müsste Data, Metadata und System RAID1 dabei sein
+# zwischendurch kann man einfach mal schauen, ob das Anlegen des Dateisystems soweit gut war. Es m&uuml;sste Data, Metadata und System RAID1 dabei sein
 btrfs fi usage /vault
 
 btrfs subvolume create /mnt/@
@@ -307,10 +307,10 @@ umount /mnt
 # Mountpunkt anlegen
 mkdir /vault
 
-# /etc/fstab Eintrag für Subvolume @ (die eigentlichen Daten)
+# /etc/fstab Eintrag f&uuml;r Subvolume @ (die eigentlichen Daten)
 echo "UUID=`blkid -s UUID -o value /dev/mapper/phobos`   /vault  btrfs   subvol=@,device=/dev/mapper/deimos,device=/dev/mapper/phobos,defaults,rw,user,nofail,nodev,nosuid,noexec,noatime,autodefrag  0  0" &gt;&gt; /etc/fstab
 
-# /etc/fstab Eintrag für Subvolume @snapshots
+# /etc/fstab Eintrag f&uuml;r Subvolume @snapshots
 echo "UUID=`blkid -s UUID -o value /dev/mapper/phobos`   /vault/.snapshots  btrfs  subvol=@snapshots,device=/dev/mapper/deimos,device=/dev/mapper/phobos,defaults,rw,user,nofail,nodev,nosuid,noexec,noatime,autodefrag  0  0" &gt;&gt; /etc/fstab
 
 # jetzt Datenvolume mounten und Berechtigungen anpassen
@@ -322,7 +322,7 @@ chmod 0770 /vault/.
 apt-get install snapper
 snapper -c vault create-config /vault
 
-# das Verzeichnis, das Snapper angelegt hat, löschen
+# das Verzeichnis, das Snapper angelegt hat, l&ouml;schen
 rm -rf /vault/.snapshots
 
 # und neu anlegen und jetzt das Subvolume reinmounten
@@ -349,16 +349,16 @@ apt-get install snapper-gui
     </section>
     <section>
         <h2>Backups mit snap-sync</h2>
-        <p>Einen Backup Datenträger mit btrfs formatieren und mounten</p>
+        <p>Einen Backup Datentr&auml;ger mit btrfs formatieren und mounten</p>
         <pre><code>
 # partitionieren
 $ parted --script /dev/sdc "mklabel gpt"
 $ parted --script /dev/sdc "mkpart primary 1 100%"
 
-# verschlüsseln
+# verschl&uuml;sseln
 $ cryptsetup -y -v luksFormat /dev/sdc1 --hash sha512 --cipher aes-xts-plain64 --key-size 512 --iter-time 10000
 
-# verschlüsseltes Volume öffnen
+# verschl&uuml;sseltes Volume &ouml;ffnen
 $ cryptsetup luksOpen /dev/sdc1 backup
 
 # formatieren
@@ -367,7 +367,7 @@ $ mkfs.btrfs -f -L backup /dev/mapper/backup
 # mounten
 $ mount /dev/mapper/backup /mnt
 </code></pre><br>
-<p>Snapsync herunterladen https://github.com/wesbarnett/snap-sync/releases entpacken und als root make install ausführen Dann kann man die btrfs Dateisysteme mit incrementellen Snapshots sichern</p>
+<p>Snapsync herunterladen https://github.com/wesbarnett/snap-sync/releases entpacken und als root make install ausf&uuml;hren Dann kann man die btrfs Dateisysteme mit incrementellen Snapshots sichern</p>
 
 <pre><code>
 # das Zieldateisystem muss irgendwo gemoutet sein
