@@ -264,11 +264,13 @@ footer a:visited {
 @media (max-width: 768px) {
     .content {
         flex-direction: column;
+        padding-left: 0px;
+        padding-right: 0px;
     }
 
     aside {
         display: none;
-        width: 100%; /* Allow aside to fill the screen width */
+        width: 100%;
         align-self: start; /* Align aside to the start of the container */
     }
 
